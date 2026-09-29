@@ -161,3 +161,12 @@
     color: var(--color-foreground);
   }
 }
+
+@media print {
+  body * { visibility: hidden; }
+  .print-area, .print-area * { visibility: visible; }
+  .print-area { position: absolute !important; inset: 0 auto auto 0 !important; overflow: visible !important; background: white !important; }
+  .print-area .sheet { box-shadow: none !important; margin: 0 !important; width: auto !important; padding: 0 !important; }
+  .no-print { display: none !important; }
+  @page { size: A4; margin: 16mm; }
+}

@@ -71,6 +71,36 @@ export type Database = {
           },
         ]
       }
+      clinic_settings: {
+        Row: {
+          address: string | null
+          cnpj: string | null
+          email: string | null
+          id: number
+          name: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          cnpj?: string | null
+          email?: string | null
+          id?: number
+          name: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          cnpj?: string | null
+          email?: string | null
+          id?: number
+          name?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       clinical_evolutions: {
         Row: {
           appointment_id: string | null
@@ -295,6 +325,72 @@ export type Database = {
         }
         Relationships: []
       }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string
+          created_by: string | null
+          created_by_name: string | null
+          id: string
+          method: string
+          paid_on: string
+          patient_id: string
+          receipt_no: number
+          receivable_id: string
+          refund_reason: string | null
+          refunded_at: string | null
+          refunded_by: string | null
+          refunded_by_name: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          created_by?: string | null
+          created_by_name?: string | null
+          id?: string
+          method: string
+          paid_on: string
+          patient_id: string
+          receipt_no?: number
+          receivable_id: string
+          refund_reason?: string | null
+          refunded_at?: string | null
+          refunded_by?: string | null
+          refunded_by_name?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          created_by?: string | null
+          created_by_name?: string | null
+          id?: string
+          method?: string
+          paid_on?: string
+          patient_id?: string
+          receipt_no?: number
+          receivable_id?: string
+          refund_reason?: string | null
+          refunded_at?: string | null
+          refunded_by?: string | null
+          refunded_by_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_receivable_id_fkey"
+            columns: ["receivable_id"]
+            isOneToOne: false
+            referencedRelation: "receivables"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       procedures: {
         Row: {
           active: boolean
@@ -349,6 +445,132 @@ export type Database = {
         }
         Relationships: []
       }
+      quote_items: {
+        Row: {
+          description: string
+          id: string
+          position: number
+          price: number
+          procedure_id: string | null
+          quote_id: string
+          step_id: string | null
+          teeth: number[]
+        }
+        Insert: {
+          description: string
+          id?: string
+          position?: number
+          price: number
+          procedure_id?: string | null
+          quote_id: string
+          step_id?: string | null
+          teeth?: number[]
+        }
+        Update: {
+          description?: string
+          id?: string
+          position?: number
+          price?: number
+          procedure_id?: string | null
+          quote_id?: string
+          step_id?: string | null
+          teeth?: number[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quote_items_procedure_id_fkey"
+            columns: ["procedure_id"]
+            isOneToOne: false
+            referencedRelation: "procedures"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quote_items_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quote_items_step_id_fkey"
+            columns: ["step_id"]
+            isOneToOne: false
+            referencedRelation: "treatment_plan_steps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quotes: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          decided_at: string | null
+          discount_amount: number
+          discount_approved_by: string | null
+          discount_approved_name: string | null
+          discount_type: string
+          discount_value: number
+          first_due: string
+          id: string
+          installments: number
+          number: number
+          patient_id: string
+          refusal_reason: string | null
+          status: string
+          subtotal: number
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          decided_at?: string | null
+          discount_amount?: number
+          discount_approved_by?: string | null
+          discount_approved_name?: string | null
+          discount_type?: string
+          discount_value?: number
+          first_due: string
+          id?: string
+          installments?: number
+          number?: number
+          patient_id: string
+          refusal_reason?: string | null
+          status?: string
+          subtotal: number
+          total: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          decided_at?: string | null
+          discount_amount?: number
+          discount_approved_by?: string | null
+          discount_approved_name?: string | null
+          discount_type?: string
+          discount_value?: number
+          first_due?: string
+          id?: string
+          installments?: number
+          number?: number
+          patient_id?: string
+          refusal_reason?: string | null
+          status?: string
+          subtotal?: number
+          total?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotes_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       receivables: {
         Row: {
           amount: number
@@ -356,7 +578,10 @@ export type Database = {
           description: string | null
           due_date: string
           id: string
+          installment_no: number | null
+          paid_amount: number
           patient_id: string
+          quote_id: string | null
           status: string
           updated_at: string
         }
@@ -366,7 +591,10 @@ export type Database = {
           description?: string | null
           due_date: string
           id?: string
+          installment_no?: number | null
+          paid_amount?: number
           patient_id: string
+          quote_id?: string | null
           status?: string
           updated_at?: string
         }
@@ -376,7 +604,10 @@ export type Database = {
           description?: string | null
           due_date?: string
           id?: string
+          installment_no?: number | null
+          paid_amount?: number
           patient_id?: string
+          quote_id?: string | null
           status?: string
           updated_at?: string
         }
@@ -386,6 +617,13 @@ export type Database = {
             columns: ["patient_id"]
             isOneToOne: false
             referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "receivables_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
             referencedColumns: ["id"]
           },
         ]
@@ -545,6 +783,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      approve_quote: { Args: { _quote: string }; Returns: undefined }
       can_access_chart: { Args: { _patient: string }; Returns: boolean }
       current_dentist_id: { Args: never; Returns: string }
       dashboard_stock_alerts: {
@@ -573,6 +812,31 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      quote_plan_items: {
+        Args: { _patient: string }
+        Returns: {
+          code: string
+          name: string
+          price: number
+          procedure_id: string
+          step_id: string
+          step_order: number
+          teeth: number[]
+        }[]
+      }
+      refund_payment: {
+        Args: { _payment: string; _reason: string }
+        Returns: undefined
+      }
+      register_payment: {
+        Args: {
+          _amount: number
+          _method: string
+          _paid_on: string
+          _receivable: string
+        }
+        Returns: string
       }
     }
     Enums: {

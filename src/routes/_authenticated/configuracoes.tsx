@@ -36,6 +36,7 @@ function Configuracoes() {
     <>
       <PageHeader title="Configurações" />
       <main className="space-y-4 p-6">
+        <ClinicPanel />
         <ProceduresPanel />
         <h2 className="text-[15px] font-bold">Jornada de trabalho dos dentistas</h2>
         <p className="text-[13px] text-muted-foreground">A Agenda só oferece horários dentro desta jornada.</p>
@@ -179,6 +180,44 @@ function ProceduresPanel() {
           className="h-8 rounded-md bg-primary px-4 text-[13px] font-bold text-primary-foreground disabled:opacity-50">
           {form.id ? "Salvar alteração" : "Adicionar"}
         </button>
+      </div>
+    </Panel>
+  );
+}
+
+function ClinicPanel() {
+  const qc = useQueryClient();
+  const { data } = useQuery({
+    queryKey: ["clinic"],
+    queryFn: async () => (await supabase.from("clinic_settings").select("*").eq("id", 1).maybeSingle()).data,
+  });
+  const [f, setF] = useState({ name: "", cnpj: "", address: "", phone: "", email: "" });
+  useEffect(() => {
+    if (data) setF({ name: data.name, cnpj: data.cnpj ?? "", address: data.address ?? "", phone: data.phone ?? "", email: data.email ?? "" });
+  }, [data]);
+  const save = useMutation({
+    mutationFn: async () => {
+      const { error } = await supabase.from("clinic_settings").upsert({ id: 1, ...f, name: f.name.trim() });
+      if (error) throw error;
+    },
+    onSuccess: () => { toast.success("Dados da clínica salvos"); qc.invalidateQueries({ queryKey: ["clinic"] }); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+  const input = "h-8 w-full rounded-md border border-input bg-card px-2 text-[13px]";
+  const fields: [keyof typeof f, string][] = [["name", "Nome da clínica"], ["cnpj", "CNPJ"], ["address", "Endereço"], ["phone", "Telefone"], ["email", "E-mail"]];
+  return (
+    <Panel title="Dados da clínica (usados no orçamento em PDF e nos recibos)">
+      <div className="grid grid-cols-2 gap-2">
+        {fields.map(([k, l]) => (
+          <label key={k} className={`text-xs font-bold text-foreground/80 ${k === "address" ? "col-span-2" : ""}`}>
+            {l}
+            <input className={input} value={f[k]} onChange={(e) => setF({ ...f, [k]: e.target.value })} />
+          </label>
+        ))}
+      </div>
+      <div className="mt-3 flex justify-end">
+        <button disabled={!f.name.trim() || save.isPending} onClick={() => save.mutate()}
+          className="h-8 rounded-md bg-primary px-4 text-[13px] font-bold text-primary-foreground disabled:opacity-50">Salvar</button>
       </div>
     </Panel>
   );
