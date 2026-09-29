@@ -1,6 +1,6 @@
 # OdontoERP — Fase 1 (base, login, perfis, Painel e Pacientes)
 
-Observação: o texto cita protótipos em imagem, mas nenhuma imagem foi anexada. O layout seguirá a descrição (cores e organização). Se enviar as imagens, ajusto os detalhes.
+Layout seguirá fielmente os protótipos enviados (Login, Painel, Pacientes). Os protótipos de Agenda, Prontuário, Orçamento e Estoque ficam como referência para as próximas fases.
 
 ## O que será construído
 
