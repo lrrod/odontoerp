@@ -19,9 +19,12 @@ import { Route as AuthenticatedEstoqueRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedPacientesRouteImport } from './routes/_authenticated/pacientes'
 import { Route as AuthenticatedPainelRouteImport } from './routes/_authenticated/painel'
 import { Route as AuthenticatedRelatoriosRouteImport } from './routes/_authenticated/relatorios'
+import { Route as AuthenticatedFinanceiroIndexRouteImport } from './routes/_authenticated/financeiro.index'
 import { Route as AuthenticatedOrcamentosIndexRouteImport } from './routes/_authenticated/orcamentos.index'
 import { Route as AuthenticatedProntuariosIndexRouteImport } from './routes/_authenticated/prontuarios.index'
 import { Route as AuthenticatedProntuariosPatientIdRouteImport } from './routes/_authenticated/prontuarios.$patientId'
+import { Route as AuthenticatedFinanceiroReciboIdRouteImport } from './routes/_authenticated/financeiro.recibo.$id'
+import { Route as AuthenticatedOrcamentosIdPdfRouteImport } from './routes/_authenticated/orcamentos.$id.pdf'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -73,6 +76,12 @@ const AuthenticatedRelatoriosRoute = AuthenticatedRelatoriosRouteImport.update({
   path: '/relatorios',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedFinanceiroIndexRoute =
+  AuthenticatedFinanceiroIndexRouteImport.update({
+    id: '/financeiro/',
+    path: '/financeiro/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedOrcamentosIndexRoute =
   AuthenticatedOrcamentosIndexRouteImport.update({
     id: '/orcamentos/',
@@ -91,6 +100,18 @@ const AuthenticatedProntuariosPatientIdRoute =
     path: '/prontuarios/$patientId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedFinanceiroReciboIdRoute =
+  AuthenticatedFinanceiroReciboIdRouteImport.update({
+    id: '/financeiro/recibo/$id',
+    path: '/financeiro/recibo/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedOrcamentosIdPdfRoute =
+  AuthenticatedOrcamentosIdPdfRouteImport.update({
+    id: '/orcamentos/$id/pdf',
+    path: '/orcamentos/$id/pdf',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -103,8 +124,11 @@ export interface FileRoutesByFullPath {
   '/painel': typeof AuthenticatedPainelRoute
   '/relatorios': typeof AuthenticatedRelatoriosRoute
   '/prontuarios/$patientId': typeof AuthenticatedProntuariosPatientIdRoute
+  '/financeiro/': typeof AuthenticatedFinanceiroIndexRoute
   '/orcamentos/': typeof AuthenticatedOrcamentosIndexRoute
   '/prontuarios/': typeof AuthenticatedProntuariosIndexRoute
+  '/financeiro/recibo/$id': typeof AuthenticatedFinanceiroReciboIdRoute
+  '/orcamentos/$id/pdf': typeof AuthenticatedOrcamentosIdPdfRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -117,8 +141,11 @@ export interface FileRoutesByTo {
   '/painel': typeof AuthenticatedPainelRoute
   '/relatorios': typeof AuthenticatedRelatoriosRoute
   '/prontuarios/$patientId': typeof AuthenticatedProntuariosPatientIdRoute
+  '/financeiro': typeof AuthenticatedFinanceiroIndexRoute
   '/orcamentos': typeof AuthenticatedOrcamentosIndexRoute
   '/prontuarios': typeof AuthenticatedProntuariosIndexRoute
+  '/financeiro/recibo/$id': typeof AuthenticatedFinanceiroReciboIdRoute
+  '/orcamentos/$id/pdf': typeof AuthenticatedOrcamentosIdPdfRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -133,8 +160,11 @@ export interface FileRoutesById {
   '/_authenticated/painel': typeof AuthenticatedPainelRoute
   '/_authenticated/relatorios': typeof AuthenticatedRelatoriosRoute
   '/_authenticated/prontuarios/$patientId': typeof AuthenticatedProntuariosPatientIdRoute
+  '/_authenticated/financeiro/': typeof AuthenticatedFinanceiroIndexRoute
   '/_authenticated/orcamentos/': typeof AuthenticatedOrcamentosIndexRoute
   '/_authenticated/prontuarios/': typeof AuthenticatedProntuariosIndexRoute
+  '/_authenticated/financeiro/recibo/$id': typeof AuthenticatedFinanceiroReciboIdRoute
+  '/_authenticated/orcamentos/$id/pdf': typeof AuthenticatedOrcamentosIdPdfRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -149,8 +179,11 @@ export interface FileRouteTypes {
     | '/painel'
     | '/relatorios'
     | '/prontuarios/$patientId'
+    | '/financeiro/'
     | '/orcamentos/'
     | '/prontuarios/'
+    | '/financeiro/recibo/$id'
+    | '/orcamentos/$id/pdf'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -163,8 +196,11 @@ export interface FileRouteTypes {
     | '/painel'
     | '/relatorios'
     | '/prontuarios/$patientId'
+    | '/financeiro'
     | '/orcamentos'
     | '/prontuarios'
+    | '/financeiro/recibo/$id'
+    | '/orcamentos/$id/pdf'
   id:
     | '__root__'
     | '/'
@@ -178,8 +214,11 @@ export interface FileRouteTypes {
     | '/_authenticated/painel'
     | '/_authenticated/relatorios'
     | '/_authenticated/prontuarios/$patientId'
+    | '/_authenticated/financeiro/'
     | '/_authenticated/orcamentos/'
     | '/_authenticated/prontuarios/'
+    | '/_authenticated/financeiro/recibo/$id'
+    | '/_authenticated/orcamentos/$id/pdf'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -261,6 +300,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRelatoriosRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/financeiro/': {
+      id: '/_authenticated/financeiro/'
+      path: '/financeiro'
+      fullPath: '/financeiro/'
+      preLoaderRoute: typeof AuthenticatedFinanceiroIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/orcamentos/': {
       id: '/_authenticated/orcamentos/'
       path: '/orcamentos'
@@ -282,6 +328,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProntuariosPatientIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/financeiro/recibo/$id': {
+      id: '/_authenticated/financeiro/recibo/$id'
+      path: '/financeiro/recibo/$id'
+      fullPath: '/financeiro/recibo/$id'
+      preLoaderRoute: typeof AuthenticatedFinanceiroReciboIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/orcamentos/$id/pdf': {
+      id: '/_authenticated/orcamentos/$id/pdf'
+      path: '/orcamentos/$id/pdf'
+      fullPath: '/orcamentos/$id/pdf'
+      preLoaderRoute: typeof AuthenticatedOrcamentosIdPdfRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -293,8 +353,11 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPainelRoute: typeof AuthenticatedPainelRoute
   AuthenticatedRelatoriosRoute: typeof AuthenticatedRelatoriosRoute
   AuthenticatedProntuariosPatientIdRoute: typeof AuthenticatedProntuariosPatientIdRoute
+  AuthenticatedFinanceiroIndexRoute: typeof AuthenticatedFinanceiroIndexRoute
   AuthenticatedOrcamentosIndexRoute: typeof AuthenticatedOrcamentosIndexRoute
   AuthenticatedProntuariosIndexRoute: typeof AuthenticatedProntuariosIndexRoute
+  AuthenticatedFinanceiroReciboIdRoute: typeof AuthenticatedFinanceiroReciboIdRoute
+  AuthenticatedOrcamentosIdPdfRoute: typeof AuthenticatedOrcamentosIdPdfRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -306,8 +369,11 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedRelatoriosRoute: AuthenticatedRelatoriosRoute,
   AuthenticatedProntuariosPatientIdRoute:
     AuthenticatedProntuariosPatientIdRoute,
+  AuthenticatedFinanceiroIndexRoute: AuthenticatedFinanceiroIndexRoute,
   AuthenticatedOrcamentosIndexRoute: AuthenticatedOrcamentosIndexRoute,
   AuthenticatedProntuariosIndexRoute: AuthenticatedProntuariosIndexRoute,
+  AuthenticatedFinanceiroReciboIdRoute: AuthenticatedFinanceiroReciboIdRoute,
+  AuthenticatedOrcamentosIdPdfRoute: AuthenticatedOrcamentosIdPdfRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
