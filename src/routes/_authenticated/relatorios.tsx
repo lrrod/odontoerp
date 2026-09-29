@@ -27,7 +27,7 @@ const MONTHS = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "
 const monthLabel = (ym: string) => `${MONTHS[Number(ym.slice(5, 7)) - 1]}/${ym.slice(2, 4)}`;
 const daysBetween = (a: string, b: string) => Math.round((new Date(b + "T00:00:00").getTime() - new Date(a + "T00:00:00").getTime()) / 86400000);
 const firstOfMonth = (iso: string) => iso.slice(0, 8) + "01";
-const lastOfMonth = (iso: string) => addMonths(firstOfMonth(iso), 1).replace(/-01$/, "") && prevDay(addMonths(firstOfMonth(iso), 1));
+const lastOfMonth = (iso: string) => prevDay(addMonths(firstOfMonth(iso), 1));
 function prevDay(iso: string) {
   const d = new Date(iso + "T12:00:00Z");
   d.setUTCDate(d.getUTCDate() - 1);
