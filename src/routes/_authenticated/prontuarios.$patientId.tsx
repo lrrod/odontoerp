@@ -130,7 +130,7 @@ function Chart() {
     <>
       <PageHeader title="Prontuário" />
       <main className="grid gap-4 p-6 xl:grid-cols-[1fr_380px]">
-        <div className="space-y-4">
+        <div className="min-w-0 space-y-4">
           <Panel>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>

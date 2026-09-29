@@ -51,7 +51,7 @@ export function Odontogram({ rows, editable, onSet }: {
 
   return (
     <div>
-      <div className="space-y-2 overflow-x-auto">
+      <div className="space-y-2 overflow-x-auto pb-1">
         {renderRow(UPPER, true)}
         <div className="mx-auto h-px w-full bg-border" />
         {renderRow(LOWER, false)}
