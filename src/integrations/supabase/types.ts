@@ -664,6 +664,59 @@ export type Database = {
         }
         Relationships: []
       }
+      stock_movements: {
+        Row: {
+          author_id: string | null
+          author_name: string
+          created_at: string
+          expiry_date: string | null
+          id: string
+          item_id: string
+          kind: string
+          lot: string | null
+          note: string | null
+          quantity: number
+          supplier: string | null
+          total_value: number | null
+        }
+        Insert: {
+          author_id?: string | null
+          author_name?: string
+          created_at?: string
+          expiry_date?: string | null
+          id?: string
+          item_id: string
+          kind: string
+          lot?: string | null
+          note?: string | null
+          quantity: number
+          supplier?: string | null
+          total_value?: number | null
+        }
+        Update: {
+          author_id?: string | null
+          author_name?: string
+          created_at?: string
+          expiry_date?: string | null
+          id?: string
+          item_id?: string
+          kind?: string
+          lot?: string | null
+          note?: string | null
+          quantity?: number
+          supplier?: string | null
+          total_value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_movements_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "stock_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tooth_conditions: {
         Row: {
           condition: string
@@ -837,6 +890,21 @@ export type Database = {
           _receivable: string
         }
         Returns: string
+      }
+      stock_entry: {
+        Args: {
+          _expiry: string
+          _item: string
+          _lot: string
+          _qty: number
+          _supplier: string
+          _value: number
+        }
+        Returns: string
+      }
+      stock_exit: {
+        Args: { _item: string; _kind: string; _note: string; _qty: number }
+        Returns: undefined
       }
     }
     Enums: {

@@ -18,3 +18,4 @@
 - Quote discounts >15% are enforced by the `quotes_guard` trigger (only admin or service role may insert); receptionists get admin authorization via the `createQuoteWithAdminAuth` server fn, which verifies the admin password and inserts with the service client. Why: UI-only checks can be bypassed.
 - Payments are append-only (`payments_guard`); money moves only through `approve_quote`, `register_payment` and `refund_payment` (admin-only) RPCs, which keep `receivables.paid_amount`/status in sync. "Vencida" is derived at read time, never stored.
 - Quote PDF and receipts are print routes using `PrintSheet` + `@media print` CSS, no PDF library.
+- Stock balances change only via `stock_entry`/`stock_exit` RPCs (admin-checked, block use of expired lots); `stock_movements` is append-only (guard trigger). Restock alerts are derived from balance < minimum at read time, so they clear automatically.
