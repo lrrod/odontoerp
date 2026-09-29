@@ -9,7 +9,7 @@ function ToothSvg({ faces, whole }: { faces: Record<string, Condition>; whole?: 
   const f = (k: Face) => (whole === "extrair" ? FILL.extrair : whole === "ausente" ? FILL.ausente : FILL[faces[k] ?? "higido"]);
   const stroke = "var(--foreground)";
   return (
-    <svg viewBox="0 0 40 40" className="h-9 w-9">
+    <svg viewBox="0 0 40 40" className="h-8 w-8">
       <polygon points="0,0 40,0 28,12 12,12" fill={f("V")} stroke={stroke} strokeWidth="1" />
       <polygon points="40,0 40,40 28,28 28,12" fill={f("D")} stroke={stroke} strokeWidth="1" />
       <polygon points="0,40 40,40 28,28 12,28" fill={f("L")} stroke={stroke} strokeWidth="1" />
@@ -33,7 +33,7 @@ export function Odontogram({ rows, editable, onSet }: {
     return { faces, whole };
   };
   const renderRow = (teeth: number[], top: boolean) => (
-    <div className="flex justify-center gap-1">
+    <div className="mx-auto flex w-max gap-0.5">
       {teeth.map((t, i) => {
         const s = byTooth(t);
         return (
