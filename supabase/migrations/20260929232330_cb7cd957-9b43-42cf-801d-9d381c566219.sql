@@ -1,0 +1,2 @@
+DROP POLICY "profiles read" ON public.profiles;
+CREATE POLICY "profiles read own or admin" ON public.profiles FOR SELECT TO authenticated USING (id = auth.uid() OR public.has_role(auth.uid(), 'admin'));

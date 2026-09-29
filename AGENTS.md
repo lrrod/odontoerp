@@ -19,3 +19,4 @@
 - Payments are append-only (`payments_guard`); money moves only through `approve_quote`, `register_payment` and `refund_payment` (admin-only) RPCs, which keep `receivables.paid_amount`/status in sync. "Vencida" is derived at read time, never stored.
 - Quote PDF and receipts are print routes using `PrintSheet` + `@media print` CSS, no PDF library.
 - Stock balances change only via `stock_entry`/`stock_exit` RPCs (admin-checked, block use of expired lots); `stock_movements` is append-only (guard trigger). Restock alerts are derived from balance < minimum at read time, so they clear automatically.
+- Reports (`relatorios.tsx`) aggregate in the browser under admin RLS; revenue per dentist = dentist of patient's last realized appointment up to payment date. Why: payments aren't linked to appointments.
