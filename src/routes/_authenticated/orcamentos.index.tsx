@@ -9,7 +9,7 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { fieldCls, labelCls } from "@/components/AuthCard";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useCurrentUser } from "@/lib/current-user";
-import { QUOTE_STATUS, dateBr, money, round2, splitInstallments, addMonths, todaySP } from "@/lib/finance";
+import { QUOTE_STATUS, dateBr, money, round2, splitInstallments, todaySP } from "@/lib/finance";
 import { createQuoteWithAdminAuth } from "@/lib/quotes.functions";
 
 export const Route = createFileRoute("/_authenticated/orcamentos/")({
@@ -341,4 +341,3 @@ function QuoteDetail({ id, onClose }: { id: string; onClose: () => void }) {
   );
 }
 
-export { addMonths };

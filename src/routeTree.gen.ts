@@ -19,6 +19,7 @@ import { Route as AuthenticatedEstoqueRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedPacientesRouteImport } from './routes/_authenticated/pacientes'
 import { Route as AuthenticatedPainelRouteImport } from './routes/_authenticated/painel'
 import { Route as AuthenticatedRelatoriosRouteImport } from './routes/_authenticated/relatorios'
+import { Route as AuthenticatedOrcamentosIndexRouteImport } from './routes/_authenticated/orcamentos.index'
 import { Route as AuthenticatedProntuariosIndexRouteImport } from './routes/_authenticated/prontuarios.index'
 import { Route as AuthenticatedProntuariosPatientIdRouteImport } from './routes/_authenticated/prontuarios.$patientId'
 
@@ -72,6 +73,12 @@ const AuthenticatedRelatoriosRoute = AuthenticatedRelatoriosRouteImport.update({
   path: '/relatorios',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedOrcamentosIndexRoute =
+  AuthenticatedOrcamentosIndexRouteImport.update({
+    id: '/orcamentos/',
+    path: '/orcamentos/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedProntuariosIndexRoute =
   AuthenticatedProntuariosIndexRouteImport.update({
     id: '/prontuarios/',
@@ -96,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/painel': typeof AuthenticatedPainelRoute
   '/relatorios': typeof AuthenticatedRelatoriosRoute
   '/prontuarios/$patientId': typeof AuthenticatedProntuariosPatientIdRoute
+  '/orcamentos/': typeof AuthenticatedOrcamentosIndexRoute
   '/prontuarios/': typeof AuthenticatedProntuariosIndexRoute
 }
 export interface FileRoutesByTo {
@@ -109,6 +117,7 @@ export interface FileRoutesByTo {
   '/painel': typeof AuthenticatedPainelRoute
   '/relatorios': typeof AuthenticatedRelatoriosRoute
   '/prontuarios/$patientId': typeof AuthenticatedProntuariosPatientIdRoute
+  '/orcamentos': typeof AuthenticatedOrcamentosIndexRoute
   '/prontuarios': typeof AuthenticatedProntuariosIndexRoute
 }
 export interface FileRoutesById {
@@ -124,6 +133,7 @@ export interface FileRoutesById {
   '/_authenticated/painel': typeof AuthenticatedPainelRoute
   '/_authenticated/relatorios': typeof AuthenticatedRelatoriosRoute
   '/_authenticated/prontuarios/$patientId': typeof AuthenticatedProntuariosPatientIdRoute
+  '/_authenticated/orcamentos/': typeof AuthenticatedOrcamentosIndexRoute
   '/_authenticated/prontuarios/': typeof AuthenticatedProntuariosIndexRoute
 }
 export interface FileRouteTypes {
@@ -139,6 +149,7 @@ export interface FileRouteTypes {
     | '/painel'
     | '/relatorios'
     | '/prontuarios/$patientId'
+    | '/orcamentos/'
     | '/prontuarios/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -152,6 +163,7 @@ export interface FileRouteTypes {
     | '/painel'
     | '/relatorios'
     | '/prontuarios/$patientId'
+    | '/orcamentos'
     | '/prontuarios'
   id:
     | '__root__'
@@ -166,6 +178,7 @@ export interface FileRouteTypes {
     | '/_authenticated/painel'
     | '/_authenticated/relatorios'
     | '/_authenticated/prontuarios/$patientId'
+    | '/_authenticated/orcamentos/'
     | '/_authenticated/prontuarios/'
   fileRoutesById: FileRoutesById
 }
@@ -248,6 +261,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRelatoriosRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/orcamentos/': {
+      id: '/_authenticated/orcamentos/'
+      path: '/orcamentos'
+      fullPath: '/orcamentos/'
+      preLoaderRoute: typeof AuthenticatedOrcamentosIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/prontuarios/': {
       id: '/_authenticated/prontuarios/'
       path: '/prontuarios'
@@ -273,6 +293,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPainelRoute: typeof AuthenticatedPainelRoute
   AuthenticatedRelatoriosRoute: typeof AuthenticatedRelatoriosRoute
   AuthenticatedProntuariosPatientIdRoute: typeof AuthenticatedProntuariosPatientIdRoute
+  AuthenticatedOrcamentosIndexRoute: typeof AuthenticatedOrcamentosIndexRoute
   AuthenticatedProntuariosIndexRoute: typeof AuthenticatedProntuariosIndexRoute
 }
 
@@ -285,6 +306,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedRelatoriosRoute: AuthenticatedRelatoriosRoute,
   AuthenticatedProntuariosPatientIdRoute:
     AuthenticatedProntuariosPatientIdRoute,
+  AuthenticatedOrcamentosIndexRoute: AuthenticatedOrcamentosIndexRoute,
   AuthenticatedProntuariosIndexRoute: AuthenticatedProntuariosIndexRoute,
 }
 
