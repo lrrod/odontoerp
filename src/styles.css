@@ -66,6 +66,8 @@
   --color-warn: var(--status-warn-fg); --color-warn-bg: var(--status-warn-bg);
   --color-alert: var(--status-alert-fg); --color-alert-bg: var(--status-alert-bg);
   --color-info: var(--status-info-fg); --color-info-bg: var(--status-info-bg);
+  --color-tooth-higido: var(--tooth-higido); --color-tooth-carie: var(--tooth-carie); --color-tooth-restaurado: var(--tooth-restaurado);
+  --color-tooth-canal: var(--tooth-canal); --color-tooth-ausente: var(--tooth-ausente); --color-tooth-extrair: var(--tooth-extrair);
 }
 
 :root {
@@ -103,6 +105,8 @@
   --status-warn-bg: #FDF1D8; --status-warn-fg: #B7721A;
   --status-alert-bg: #FCE3E1; --status-alert-fg: #C0392B;
   --status-info-bg: #E4EEF7; --status-info-fg: #2C5F8A;
+  --tooth-higido: #FFFFFF; --tooth-carie: #E74C3C; --tooth-restaurado: #3B82C4;
+  --tooth-canal: #F2A93B; --tooth-ausente: #B8C2CC; --tooth-extrair: #8E44AD;
   --sidebar-primary: oklch(0.208 0.042 265.755);
   --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
   --sidebar-accent: oklch(0.968 0.007 247.896);
