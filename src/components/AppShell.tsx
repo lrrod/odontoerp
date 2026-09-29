@@ -8,16 +8,7 @@ import { cn } from "@/lib/utils";
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { data: user } = useCurrentUser();
   const path = useRouterState({ select: (s) => s.location.pathname });
-  const navigate = useNavigate();
-  const qc = useQueryClient();
   const items = MODULES.filter((m) => user?.role && (m.roles as readonly string[]).includes(user.role));
-
-  async function signOut() {
-    await qc.cancelQueries();
-    qc.clear();
-    await supabase.auth.signOut();
-    navigate({ to: "/login", replace: true });
-  }
 
   return (
     <div className="flex min-h-screen w-full bg-background">
@@ -49,21 +40,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </nav>
       </aside>
       <div className="ml-[210px] flex min-h-screen flex-1 flex-col">{children}</div>
-      <UserSlot hidden />
-      {/* sign-out handled in PageHeader via context-free event */}
-      <SignOutBridge onSignOut={signOut} name={user?.name} role={user?.role ? ROLE_LABEL[user.role] : ""} />
     </div>
   );
-}
-
-// Shares sign-out + user label with PageHeader without prop drilling
-let bridge: { onSignOut: () => void; name?: string; role: string } = { onSignOut: () => {}, role: "" };
-function SignOutBridge(props: typeof bridge) {
-  bridge = props;
-  return null;
-}
-function UserSlot(_: { hidden?: boolean }) {
-  return null;
 }
 
 export function PageHeader({ title }: { title: string }) {
@@ -76,7 +54,6 @@ export function PageHeader({ title }: { title: string }) {
     await supabase.auth.signOut();
     navigate({ to: "/login", replace: true });
   }
-  void bridge;
   return (
     <header className="flex h-[54px] items-center justify-between border-b border-border bg-card px-6">
       <h1 className="text-[17px] font-bold text-foreground">{title}</h1>
