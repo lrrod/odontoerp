@@ -21,7 +21,7 @@ export const APPT_STATUS: Record<string, { label: string; tone: Tone }> = {
   agendada: { label: "Agendada", tone: "info" },
   confirmada: { label: "Confirmada", tone: "ok" },
   em_atendimento: { label: "Em atendimento", tone: "warn" },
-  concluida: { label: "Concluída", tone: "ok" },
-  faltou: { label: "Faltou", tone: "alert" },
+  realizada: { label: "Realizada", tone: "ok" },
+  falta: { label: "Falta", tone: "alert" },
   cancelada: { label: "Cancelada", tone: "alert" },
 };

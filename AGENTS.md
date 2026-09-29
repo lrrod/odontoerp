@@ -13,3 +13,4 @@
 - Roles live in `user_roles` + `has_role()`; permissions per module in `src/lib/permissions.ts` must mirror RLS policies — UI hiding is not security.
 - Login goes through `loginWithLock` server fn (3 failures → 15 min lock in `login_attempts`, service-role only), then client `setSession`.
 - App shell (sidebar + role route guard) lives in `src/routes/_authenticated/route.tsx`.
+- Appointment conflict and working-hours rules are enforced by the `appointments_validate` trigger; the Agenda UI (`src/lib/schedule.ts`) mirrors them only for highlighting/suggestions. Why: UI checks can be bypassed.

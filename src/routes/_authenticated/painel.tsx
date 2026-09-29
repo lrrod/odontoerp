@@ -58,7 +58,7 @@ function Painel() {
     },
   });
 
-  const upcoming = (data?.appts ?? []).filter((a) => a.status !== "concluida");
+  const upcoming = (data?.appts ?? []).filter((a) => a.status !== "realizada" && a.status !== "falta");
   const lowStock = (data?.stock ?? []).filter((s) => s.kind === "minimo");
 
   return (
