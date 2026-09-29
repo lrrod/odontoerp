@@ -46,4 +46,4 @@ export function receivableStatus(r: { status: string; due_date: string; amount: 
   if (r.due_date < today) return { key: "vencida", label: "Vencida", tone: "alert" as const };
   return { key: "aberto", label: "Em aberto", tone: "info" as const };
 }
-export const qs = (s: string) => QUOTE_STATUS[s] ?? QUOTE_STATUS.aguardando!;
+export const qs = (s: string) => QUOTE_STATUS[s] ?? QUOTE_STATUS['aguardando']!;
