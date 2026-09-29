@@ -136,9 +136,10 @@ function ProceduresPanel() {
   const [form, setForm] = useState<{ id?: string; code: string; name: string; price: string }>({ code: "", name: "", price: "" });
   const save = useMutation({
     mutationFn: async (row: { id?: string | undefined; code: string; name: string; price: number; active?: boolean }) => {
-      const { error } = row.id
-        ? await supabase.from("procedures").update(row).eq("id", row.id)
-        : await supabase.from("procedures").insert(row);
+      const { id, ...rest } = row;
+      const { error } = id
+        ? await supabase.from("procedures").update(rest).eq("id", id)
+        : await supabase.from("procedures").insert(rest);
       if (error) throw new Error(error.code === "23505" ? "Já existe um procedimento com esse código" : error.message);
     },
     onSuccess: () => { toast.success("Procedimento salvo"); setForm({ code: "", name: "", price: "" }); qc.invalidateQueries({ queryKey: ["procedures-admin"] }); },
