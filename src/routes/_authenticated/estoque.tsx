@@ -139,7 +139,7 @@ function Estoque() {
         <Panel title="Última movimentação">
           <ul className="text-[13px]">
             {(moves.data ?? []).map((m) => {
-              const k = KIND_LABEL[m.kind];
+              const k = KIND_LABEL[m.kind] ?? { label: m.kind, tone: "info" as Tone };
               return (
                 <li key={m.id} className="border-b border-border py-2">
                   <div className="flex items-center justify-between gap-2">
