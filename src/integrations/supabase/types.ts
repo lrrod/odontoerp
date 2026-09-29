@@ -16,6 +16,8 @@ export type Database = {
     Tables: {
       appointments: {
         Row: {
+          cancel_reason: string | null
+          cancelled_at: string | null
           created_at: string
           dentist_id: string
           duration_minutes: number
@@ -27,6 +29,8 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          cancel_reason?: string | null
+          cancelled_at?: string | null
           created_at?: string
           dentist_id: string
           duration_minutes?: number
@@ -38,6 +42,8 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          cancel_reason?: string | null
+          cancelled_at?: string | null
           created_at?: string
           dentist_id?: string
           duration_minutes?: number
