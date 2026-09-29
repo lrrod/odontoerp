@@ -38,7 +38,7 @@ export function Odontogram({ rows, editable, onSet }: {
         const s = byTooth(t);
         return (
           <button key={t} type="button" onClick={() => setOpen(t)}
-            className={cn("flex flex-col items-center rounded p-0.5 hover:bg-muted", i === 8 && "ml-3")}>
+            className={cn("flex flex-col items-center rounded hover:bg-muted", i === 8 && "ml-3")}>
             {top && <span className="text-[10px] font-bold text-muted-foreground">{t}</span>}
             <ToothSvg {...s} />
             {!top && <span className="text-[10px] font-bold text-muted-foreground">{t}</span>}

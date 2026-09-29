@@ -14,3 +14,4 @@
 - Login goes through `loginWithLock` server fn (3 failures → 15 min lock in `login_attempts`, service-role only), then client `setSession`.
 - App shell (sidebar + role route guard) lives in `src/routes/_authenticated/route.tsx`.
 - Appointment conflict and working-hours rules are enforced by the `appointments_validate` trigger; the Agenda UI (`src/lib/schedule.ts`) mirrors them only for highlighting/suggestions. Why: UI checks can be bypassed.
+- Clinical evolutions are immutable via the `evolutions_guard` trigger; chart access is `can_access_chart()` (admin, or dentist with an appointment for the patient). Finishing a visit goes through the `finalize_appointment` RPC so evolution, step completion and status change are atomic.
