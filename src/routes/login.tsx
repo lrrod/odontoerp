@@ -18,6 +18,13 @@ export const Route = createFileRoute("/login")({
   component: LoginPage,
 });
 
+const TEST_LOGINS = [
+  { name: "Roberto Lima — Administrador", email: "roberto.lima@odontoerp.com.br", password: "Gestao#Odonto26" },
+  { name: "Ana Souza — Recepcionista", email: "ana.souza@odontoerp.com.br", password: "Recepcao@2026" },
+  { name: "Dr. Carlos Prado — Dentista", email: "carlos.prado@odontoerp.com.br", password: "Dentista@2026" },
+  { name: "Dra. Paula Nunes — Dentista", email: "paula.nunes@odontoerp.com.br", password: "Dentista@2026" },
+];
+
 function LoginPage() {
   const login = useServerFn(loginWithLock);
   const navigate = useNavigate();
@@ -89,6 +96,22 @@ function LoginPage() {
           </button>
         </div>
       </form>
+      {mode === "login" && (
+        <div className="mt-7 border-t border-border pt-5">
+          <p className="mb-2.5 text-center text-[11px] font-bold uppercase tracking-wide text-muted-foreground">Logins de teste</p>
+          <div className="space-y-1.5">
+            {TEST_LOGINS.map((t) => (
+              <button key={t.email} type="button"
+                onClick={() => { setEmail(t.email); setPassword(t.password); setMsg(null); }}
+                className="flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-left text-xs hover:bg-muted/60"
+                title="Clique para preencher o formulário">
+                <span className="font-semibold text-foreground/90">{t.name}</span>
+                <span className="text-muted-foreground">{t.email} · {t.password}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </AuthCard>
   );
 }
