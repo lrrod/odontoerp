@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -125,6 +125,7 @@ function ReceivableDetail({ recv, onClose }: { recv: Recv; onClose: () => void }
   const [method, setMethod] = useState("pix");
   const [paidOn, setPaidOn] = useState(todaySP());
   const [amount, setAmount] = useState(balance.toFixed(2).replace(".", ","));
+  useEffect(() => setAmount(balance.toFixed(2).replace(".", ",")), [balance]);
   const [refundId, setRefundId] = useState<string | null>(null);
   const [reason, setReason] = useState("");
 
