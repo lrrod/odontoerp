@@ -1,0 +1,3 @@
+REVOKE EXECUTE ON FUNCTION public.quote_plan_items(uuid), public.register_payment(uuid,text,date,numeric), public.refund_payment(uuid,text), public.approve_quote(uuid) FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION public.quotes_guard(), public.payments_guard() FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.quote_plan_items(uuid), public.register_payment(uuid,text,date,numeric), public.refund_payment(uuid,text), public.approve_quote(uuid) TO authenticated;
