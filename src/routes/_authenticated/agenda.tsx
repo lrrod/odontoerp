@@ -293,8 +293,7 @@ function AppointmentForm({ initial, dentists, schedules, onClose, onSaved }: {
 
   const dSchedules = schedules.filter((s) => s.dentist_id === dentistId);
   const daySchedule = dSchedules.find((s) => s.weekday === weekdayOf(date));
-  const slots = journeySlots(daySchedule, duration, daySchedule ? Math.min(daySchedule.slot_minutes, 10) : undefined)
-    .filter((m) => m % (daySchedule?.slot_minutes ?? 10) === 0 || m % 10 === 0);
+  const slots = journeySlots(daySchedule, duration);
   const timeMin = time ? toMin(time) : null;
   const inJourney = timeMin !== null && journeySlots(daySchedule, duration, 5).includes(timeMin);
   const conflicts = timeMin !== null && busy.data ? conflictsAt(date, timeMin, duration, busy.data, initial.id) : [];
