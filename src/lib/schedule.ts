@@ -38,8 +38,10 @@ export const dayBounds = (date: string) => ({ start: toISO(date, "00:00"), end: 
 export const localDate = (iso: string) => new Date(iso).toLocaleDateString("en-CA", { timeZone: TZ });
 export const localHM = (iso: string) =>
   new Date(iso).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", hour12: false, timeZone: TZ });
-export const longDate = (date: string) =>
-  new Date(`${date}T12:00:00Z`).toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long", year: "numeric", timeZone: "UTC" });
+export const longDate = (date: string) => {
+  const s = new Date(`${date}T12:00:00Z`).toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long", year: "numeric", timeZone: "UTC" });
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
 export const shortDate = (date: string) => `${date.slice(8, 10)}/${date.slice(5, 7)}`;
 
 /** Start minutes of every slot inside the dentist's workday for the given duration. */

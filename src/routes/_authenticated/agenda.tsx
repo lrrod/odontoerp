@@ -158,7 +158,7 @@ function Agenda() {
               <button className={btnOutline} onClick={() => setDate(todaySP())}>Hoje</button>
               <button className={btnOutline} onClick={() => setDate(addDays(date, 1))} aria-label="Próximo dia">▶</button>
               <input type="date" value={date} onChange={(e) => e.target.value && setDate(e.target.value)} className={cn(field, "w-auto")} />
-              <span className="ml-2 text-[15px] font-bold capitalize text-foreground">{longDate(date)}</span>
+              <span className="ml-2 text-[15px] font-bold text-foreground">{longDate(date)}</span>
             </div>
             {staff && <button className={btnPrimary} onClick={() => setForm({ date })}>+ Agendar consulta</button>}
           </div>
@@ -210,7 +210,7 @@ function Agenda() {
         </Panel>
 
         <Panel title="Lembretes de amanhã">
-          <p className="mb-3 text-[12px] text-muted-foreground capitalize">{longDate(tomorrow)}</p>
+          <p className="mb-3 text-[12px] text-muted-foreground">{longDate(tomorrow)}</p>
           <ul className="space-y-3">
             {(reminders.data ?? []).filter((a) => !INACTIVE.includes(a.status)).map((a) => {
               const text = reminderText({ patient: a.patients?.full_name ?? "", date: tomorrow, time: localHM(a.starts_at), dentist: a.dentists?.name ?? "" });
