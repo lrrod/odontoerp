@@ -9,7 +9,7 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { fieldCls, labelCls } from "@/components/AuthCard";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useCurrentUser } from "@/lib/current-user";
-import { QUOTE_STATUS, dateBr, money, round2, splitInstallments, todaySP } from "@/lib/finance";
+import { QUOTE_STATUS, qs, dateBr, money, round2, splitInstallments, todaySP } from "@/lib/finance";
 import { createQuoteWithAdminAuth } from "@/lib/quotes.functions";
 
 export const Route = createFileRoute("/_authenticated/orcamentos/")({
@@ -70,7 +70,7 @@ function Orcamentos() {
                   <td>{dateBr(q.created_at)}</td>
                   <td>{q.installments === 1 ? "À vista" : `${q.installments}x`}</td>
                   <td className="text-right font-bold">{money(q.total)}</td>
-                  <td className="pl-4"><StatusBadge tone={QUOTE_STATUS[q.status].tone}>{QUOTE_STATUS[q.status].label}</StatusBadge></td>
+                  <td className="pl-4"><StatusBadge tone={qs(q.status).tone}>{qs(q.status).label}</StatusBadge></td>
                 </tr>
               ))}
               {!list.length && <tr><td colSpan={6} className="py-6 text-center text-muted-foreground">Nenhum orçamento encontrado.</td></tr>}
@@ -114,7 +114,7 @@ function NewQuote({ onClose, onCreated }: { onClose: () => void; onCreated: (id:
     setItems([]);
     if (!id) return;
     const { data, error } = await supabase.rpc("quote_plan_items", { _patient: id });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setItems((data ?? []).map((s) => ({
       key: s.step_id, step_id: s.step_id, procedure_id: s.procedure_id, description: `${s.code} ${s.name}`,
       teeth: s.teeth ?? [], price: Number(s.price), selected: true,
@@ -293,7 +293,7 @@ function QuoteDetail({ id, onClose }: { id: string; onClose: () => void }) {
           <div className="space-y-3 text-[13px]">
             <div className="flex items-center justify-between">
               <div><b>{q.patients?.full_name}</b> · {dateBr(q.created_at)}</div>
-              <StatusBadge tone={QUOTE_STATUS[q.status].tone}>{QUOTE_STATUS[q.status].label}</StatusBadge>
+              <StatusBadge tone={qs(q.status).tone}>{qs(q.status).label}</StatusBadge>
             </div>
             <table className="w-full">
               <tbody>

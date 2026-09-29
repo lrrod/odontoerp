@@ -10,7 +10,7 @@ export const dateBr = (iso: string | null | undefined) => {
 };
 
 export function addMonths(iso: string, months: number) {
-  const [y, m, d] = iso.split("-").map(Number);
+  const [y = 1970, m = 1, d = 1] = iso.split("-").map(Number);
   const total = m - 1 + months;
   const ny = y + Math.floor(total / 12);
   const nm = ((total % 12) + 12) % 12;
@@ -46,3 +46,4 @@ export function receivableStatus(r: { status: string; due_date: string; amount: 
   if (r.due_date < today) return { key: "vencida", label: "Vencida", tone: "alert" as const };
   return { key: "aberto", label: "Em aberto", tone: "info" as const };
 }
+export const qs = (s: string) => QUOTE_STATUS[s] ?? QUOTE_STATUS.aguardando!;

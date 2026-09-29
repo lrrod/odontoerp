@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PrintSheet } from "@/components/PrintSheet";
-import { QUOTE_STATUS, addMonths, dateBr, money, splitInstallments } from "@/lib/finance";
+import { qs, addMonths, dateBr, money, splitInstallments } from "@/lib/finance";
 
 export const Route = createFileRoute("/_authenticated/orcamentos/$id/pdf")({
   head: () => ({ meta: [{ title: "Orçamento para impressão — OdontoERP" }, { name: "description", content: "Orçamento odontológico em formato para impressão ou PDF." }] }),
@@ -29,7 +29,7 @@ function QuotePdf() {
     <PrintSheet>
       <div className="mb-4 flex items-baseline justify-between">
         <h1 className="text-lg font-bold">Orçamento nº {q.number}</h1>
-        <span>Emitido em {dateBr(q.created_at)} · {QUOTE_STATUS[q.status].label}</span>
+        <span>Emitido em {dateBr(q.created_at)} · {qs(q.status).label}</span>
       </div>
       <p className="mb-4"><b>Paciente:</b> {q.patients?.full_name}{q.patients?.phone && <> · {q.patients.phone}</>}</p>
       <table className="mb-4 w-full border-collapse">
