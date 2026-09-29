@@ -22,7 +22,7 @@ export const DURATIONS = [20, 30, 40, 60, 80, 90, 120];
 
 export const toMin = (hm: string) => {
   const [h, m] = hm.split(":").map(Number);
-  return h * 60 + m;
+  return (h ?? 0) * 60 + (m ?? 0);
 };
 export const toHM = (min: number) => `${String(Math.floor(min / 60)).padStart(2, "0")}:${String(min % 60).padStart(2, "0")}`;
 
@@ -65,7 +65,7 @@ export function overlaps(aStart: number, aDur: number, bStart: number, bDur: num
   return aStart < bStart + bDur && bStart < aStart + aDur;
 }
 
-export function conflictsAt(date: string, startMin: number, duration: number, busy: BusyAppt[], ignoreId?: string) {
+export function conflictsAt<T extends BusyAppt>(date: string, startMin: number, duration: number, busy: T[], ignoreId?: string) {
   return busy.filter((a) => {
     if (a.id === ignoreId || INACTIVE.includes(a.status) || localDate(a.starts_at) !== date) return false;
     return overlaps(startMin, duration, toMin(localHM(a.starts_at)), a.duration_minutes);

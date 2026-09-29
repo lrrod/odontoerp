@@ -247,7 +247,7 @@ function Agenda() {
       {detail && (
         <AppointmentDetail appt={detail} staff={staff} onClose={() => setDetail(null)}
           onReschedule={() => {
-            setForm({ id: detail.id, patientId: detail.patient_id, patientName: detail.patients?.full_name, dentistId: detail.dentist_id,
+            setForm({ id: detail.id, patientId: detail.patient_id, patientName: detail.patients?.full_name ?? "", dentistId: detail.dentist_id,
               procedure: detail.procedure, date: localDate(detail.starts_at), time: localHM(detail.starts_at), duration: detail.duration_minutes });
             setDetail(null);
           }} />
@@ -274,7 +274,7 @@ function AppointmentForm({ initial, dentists, schedules, onClose, onSaved }: {
     initial.patientId ? { id: initial.patientId, name: initial.patientName ?? "" } : null);
   const [search, setSearch] = useState("");
   const [dentistId, setDentistId] = useState(initial.dentistId ?? dentists[0]?.id ?? "");
-  const [procedure, setProcedure] = useState(initial.procedure ?? PROCEDURES[0]);
+  const [procedure, setProcedure] = useState<string>(initial.procedure ?? PROCEDURES[0] ?? "Avaliação");
   const [date, setDate] = useState(initial.date);
   const [duration, setDuration] = useState(initial.duration ?? 40);
   const [time, setTime] = useState(initial.time ?? "");
@@ -456,7 +456,7 @@ function AppointmentDetail({ appt, staff, onClose, onReschedule }: {
               {statuses.filter((s) => s !== appt.status).map((s) => (
                 <button key={s} disabled={update.isPending} className={cn(btnOutline, "h-8 px-3 text-[12px]")}
                   onClick={() => update.mutate({ status: s })}>
-                  {APPT_STATUS[s].label}
+                  {APPT_STATUS[s]?.label}
                 </button>
               ))}
             </div>
