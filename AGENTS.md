@@ -8,3 +8,8 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+## OdontoERP decisions
+- Roles live in `user_roles` + `has_role()`; permissions per module in `src/lib/permissions.ts` must mirror RLS policies — UI hiding is not security.
+- Login goes through `loginWithLock` server fn (3 failures → 15 min lock in `login_attempts`, service-role only), then client `setSession`.
+- App shell (sidebar + role route guard) lives in `src/routes/_authenticated/route.tsx`.
