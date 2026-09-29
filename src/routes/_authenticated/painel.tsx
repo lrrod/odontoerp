@@ -19,6 +19,7 @@ export const Route = createFileRoute("/_authenticated/painel")({
 function Painel() {
   const { data: user } = useCurrentUser();
   const staff = user?.role === "admin" || user?.role === "recepcionista";
+  const canChart = user?.role === "admin" || user?.role === "dentista";
 
   const { data } = useQuery({
     queryKey: ["dashboard", user?.id],
@@ -32,7 +33,7 @@ function Painel() {
       const [appts, patients, tomorrowCount, recv, stock] = await Promise.all([
         supabase
           .from("appointments")
-          .select("id, starts_at, procedure, status, patients(full_name), dentists(name)")
+          .select("id, patient_id, starts_at, procedure, status, patients(full_name), dentists(name)")
           .gte("starts_at", today.start)
           .lt("starts_at", today.end)
           .neq("status", "cancelada")
@@ -82,6 +83,7 @@ function Painel() {
                   <th className="px-1.5 py-2 font-bold">Dentista</th>
                   <th className="px-1.5 py-2 font-bold">Procedimento</th>
                   <th className="px-1.5 py-2 font-bold">Status</th>
+                  {canChart && <th />}
                 </tr>
               </thead>
               <tbody>
@@ -94,11 +96,19 @@ function Painel() {
                       <td className="px-1.5 py-2.5">{a.dentists?.name}</td>
                       <td className="px-1.5 py-2.5">{a.procedure}</td>
                       <td className="px-1.5 py-2.5"><StatusBadge tone={st.tone}>{st.label}</StatusBadge></td>
+                      {canChart && (
+                        <td className="px-1.5 py-2.5 text-right">
+                          <Link to="/prontuarios/$patientId" params={{ patientId: a.patient_id }} search={{ appointment: a.id }}
+                            className="font-bold text-primary hover:underline">
+                            {a.status === "realizada" ? "Ver" : "Abrir atendimento"}
+                          </Link>
+                        </td>
+                      )}
                     </tr>
                   );
                 })}
                 {data && upcoming.length === 0 && (
-                  <tr><td colSpan={5} className="py-6 text-center text-muted-foreground">Nenhuma consulta para hoje.</td></tr>
+                  <tr><td colSpan={canChart ? 6 : 5} className="py-6 text-center text-muted-foreground">Nenhuma consulta para hoje.</td></tr>
                 )}
               </tbody>
             </table>

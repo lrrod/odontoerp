@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { PageHeader, Panel } from "@/components/AppShell";
 import { WEEKDAYS, toMin } from "@/lib/schedule";
+import { brl } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/configuracoes")({
   head: () => ({
@@ -35,6 +36,7 @@ function Configuracoes() {
     <>
       <PageHeader title="Configurações" />
       <main className="space-y-4 p-6">
+        <ProceduresPanel />
         <h2 className="text-[15px] font-bold">Jornada de trabalho dos dentistas</h2>
         <p className="text-[13px] text-muted-foreground">A Agenda só oferece horários dentro desta jornada.</p>
         {data?.dentists.map((d) => (
@@ -119,6 +121,62 @@ function DentistJourney({ dentist, schedules }: {
         <button disabled={invalid || save.isPending} onClick={() => save.mutate()}
           className="h-[35px] rounded-md bg-primary px-4 text-[13px] font-bold text-primary-foreground hover:bg-primary/90 disabled:opacity-50">
           {save.isPending ? "Salvando…" : "Salvar jornada"}
+        </button>
+      </div>
+    </Panel>
+  );
+}
+
+function ProceduresPanel() {
+  const qc = useQueryClient();
+  const { data } = useQuery({
+    queryKey: ["procedures-admin"],
+    queryFn: async () => (await supabase.from("procedures").select("*").order("code")).data ?? [],
+  });
+  const [form, setForm] = useState<{ id?: string; code: string; name: string; price: string }>({ code: "", name: "", price: "" });
+  const save = useMutation({
+    mutationFn: async (row: { id?: string; code: string; name: string; price: number; active?: boolean }) => {
+      const { error } = row.id
+        ? await supabase.from("procedures").update(row).eq("id", row.id)
+        : await supabase.from("procedures").insert(row);
+      if (error) throw new Error(error.code === "23505" ? "Já existe um procedimento com esse código" : error.message);
+    },
+    onSuccess: () => { toast.success("Procedimento salvo"); setForm({ code: "", name: "", price: "" }); qc.invalidateQueries({ queryKey: ["procedures-admin"] }); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+  const input = "h-8 rounded-md border border-input bg-card px-2 text-[13px]";
+  const price = Number(form.price.replace(",", "."));
+  const valid = form.code.trim() && form.name.trim() && form.price !== "" && price >= 0;
+  return (
+    <Panel title="Procedimentos">
+      <table className="w-full text-[13px]">
+        <thead>
+          <tr className="border-b-2 border-border text-left text-muted-foreground"><th className="py-2">Código</th><th>Nome</th><th>Valor</th><th>Situação</th><th /></tr>
+        </thead>
+        <tbody>
+          {data?.map((p) => (
+            <tr key={p.id} className={`border-b border-border ${p.active ? "" : "opacity-50"}`}>
+              <td className="py-1.5 font-bold">{p.code}</td><td>{p.name}</td><td>{brl(Number(p.price))}</td>
+              <td>{p.active ? "Ativo" : "Inativo"}</td>
+              <td className="space-x-3 text-right">
+                <button className="text-primary hover:underline" onClick={() => setForm({ id: p.id, code: p.code, name: p.name, price: String(p.price) })}>Editar</button>
+                <button className="text-primary hover:underline" onClick={() => save.mutate({ id: p.id, code: p.code, name: p.name, price: Number(p.price), active: !p.active })}>
+                  {p.active ? "Desativar" : "Reativar"}
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <input className={`${input} w-24`} placeholder="Código" value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} />
+        <input className={`${input} flex-1`} placeholder="Nome do procedimento" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+        <input className={`${input} w-28`} placeholder="Valor (R$)" inputMode="decimal" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} />
+        {form.id && <button className="text-[13px] text-muted-foreground" onClick={() => setForm({ code: "", name: "", price: "" })}>Cancelar</button>}
+        <button disabled={!valid || save.isPending}
+          onClick={() => save.mutate({ id: form.id, code: form.code.trim(), name: form.name.trim(), price })}
+          className="h-8 rounded-md bg-primary px-4 text-[13px] font-bold text-primary-foreground disabled:opacity-50">
+          {form.id ? "Salvar alteração" : "Adicionar"}
         </button>
       </div>
     </Panel>
