@@ -71,6 +71,54 @@ export type Database = {
           },
         ]
       }
+      clinical_evolutions: {
+        Row: {
+          appointment_id: string | null
+          author_id: string
+          author_name: string
+          content: string
+          created_at: string
+          id: string
+          patient_id: string
+          procedures_done: string | null
+        }
+        Insert: {
+          appointment_id?: string | null
+          author_id: string
+          author_name: string
+          content: string
+          created_at?: string
+          id?: string
+          patient_id: string
+          procedures_done?: string | null
+        }
+        Update: {
+          appointment_id?: string | null
+          author_id?: string
+          author_name?: string
+          content?: string
+          created_at?: string
+          id?: string
+          patient_id?: string
+          procedures_done?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clinical_evolutions_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clinical_evolutions_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dentist_schedules: {
         Row: {
           created_at: string
@@ -145,6 +193,45 @@ export type Database = {
         }
         Relationships: []
       }
+      evolution_drafts: {
+        Row: {
+          appointment_id: string
+          content: string
+          patient_id: string
+          step_ids: string[]
+          updated_at: string
+        }
+        Insert: {
+          appointment_id: string
+          content?: string
+          patient_id: string
+          step_ids?: string[]
+          updated_at?: string
+        }
+        Update: {
+          appointment_id?: string
+          content?: string
+          patient_id?: string
+          step_ids?: string[]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "evolution_drafts_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: true
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "evolution_drafts_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       login_attempts: {
         Row: {
           email: string
@@ -204,6 +291,36 @@ export type Database = {
           id?: string
           insurance?: string | null
           phone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      procedures: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          id: string
+          name: string
+          price: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          id?: string
+          name: string
+          price?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          id?: string
+          name?: string
+          price?: number
           updated_at?: string
         }
         Relationships: []
@@ -309,6 +426,102 @@ export type Database = {
         }
         Relationships: []
       }
+      tooth_conditions: {
+        Row: {
+          condition: string
+          face: string
+          id: string
+          patient_id: string
+          tooth: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          condition: string
+          face?: string
+          id?: string
+          patient_id: string
+          tooth: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          condition?: string
+          face?: string
+          id?: string
+          patient_id?: string
+          tooth?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tooth_conditions_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      treatment_plan_steps: {
+        Row: {
+          completed_evolution_id: string | null
+          created_at: string
+          id: string
+          patient_id: string
+          procedure_id: string
+          status: string
+          step_order: number
+          teeth: number[]
+          updated_at: string
+        }
+        Insert: {
+          completed_evolution_id?: string | null
+          created_at?: string
+          id?: string
+          patient_id: string
+          procedure_id: string
+          status?: string
+          step_order?: number
+          teeth?: number[]
+          updated_at?: string
+        }
+        Update: {
+          completed_evolution_id?: string | null
+          created_at?: string
+          id?: string
+          patient_id?: string
+          procedure_id?: string
+          status?: string
+          step_order?: number
+          teeth?: number[]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "treatment_plan_steps_completed_evolution_id_fkey"
+            columns: ["completed_evolution_id"]
+            isOneToOne: false
+            referencedRelation: "clinical_evolutions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "treatment_plan_steps_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "treatment_plan_steps_procedure_id_fkey"
+            columns: ["procedure_id"]
+            isOneToOne: false
+            referencedRelation: "procedures"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
@@ -332,6 +545,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_access_chart: { Args: { _patient: string }; Returns: boolean }
       current_dentist_id: { Args: never; Returns: string }
       dashboard_stock_alerts: {
         Args: never
@@ -340,6 +554,10 @@ export type Database = {
           kind: string
           name: string
         }[]
+      }
+      finalize_appointment: {
+        Args: { _appointment: string; _content: string; _step_ids: string[] }
+        Returns: string
       }
       find_patient_by_cpf: {
         Args: { _cpf: string }

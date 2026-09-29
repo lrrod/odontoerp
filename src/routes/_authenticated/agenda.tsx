@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -419,6 +419,8 @@ function AppointmentDetail({ appt, staff, onClose, onReschedule }: {
   appt: Appt; staff: boolean; onClose: () => void; onReschedule: () => void;
 }) {
   const qc = useQueryClient();
+  const { data: me } = useCurrentUser();
+  const canChart = me?.role === "admin" || me?.role === "dentista";
   const [cancelling, setCancelling] = useState(false);
   const [reason, setReason] = useState("");
   const update = useMutation({
@@ -449,6 +451,12 @@ function AppointmentDetail({ appt, staff, onClose, onReschedule }: {
           <p><b>Status:</b> {st && <StatusBadge tone={st.tone}>{st.label}</StatusBadge>}</p>
           {appt.cancel_reason && <p><b>Motivo:</b> {appt.cancel_reason}</p>}
         </div>
+        {canChart && !inactive && (
+          <Link to="/prontuarios/$patientId" params={{ patientId: appt.patient_id }} search={{ appointment: appt.id }}
+            className="block rounded-md bg-primary py-2 text-center text-[13px] font-bold text-primary-foreground hover:bg-primary/90">
+            {appt.status === "realizada" ? "Ver prontuário" : "Abrir atendimento"}
+          </Link>
+        )}
         {!inactive && (
           <div>
             <p className="mb-2 text-[12px] font-bold text-muted-foreground">Alterar status</p>
