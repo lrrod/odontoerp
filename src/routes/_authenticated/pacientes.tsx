@@ -98,15 +98,16 @@ function Pacientes() {
       const errs: Record<string, string> = {};
       if (!parsed.success) parsed.error.issues.forEach((i) => (errs[String(i.path[0])] = i.message));
       const birth = form.birth_date ? parseBr(form.birth_date) : null;
-      if (form.birth_date && !birth) errs.birth_date = "Use dd/mm/aaaa";
+      if (form.birth_date && !birth) errs["birth_date"] = "Use dd/mm/aaaa";
       setErrors(errs);
       if (Object.keys(errs).length) return null;
 
       const cpf = onlyDigits(form.cpf);
       if (!editing || editing.cpf !== cpf) {
         const { data: found } = await supabase.rpc("find_patient_by_cpf", { _cpf: cpf });
-        if (found && found.length) {
-          setDup({ id: found[0].id, full_name: found[0].full_name });
+        const f0 = found?.[0];
+        if (f0) {
+          setDup({ id: f0.id, full_name: f0.full_name });
           return null;
         }
       }
