@@ -18,6 +18,13 @@ export const Route = createFileRoute("/login")({
   component: LoginPage,
 });
 
+const TEST_LOGINS = [
+  { name: "Roberto Lima — Administrador", email: "roberto.lima@odontoerp.com.br", password: "Gestao#Odonto26" },
+  { name: "Ana Souza — Recepcionista", email: "ana.souza@odontoerp.com.br", password: "Recepcao@2026" },
+  { name: "Dr. Carlos Prado — Dentista", email: "carlos.prado@odontoerp.com.br", password: "Dentista@2026" },
+  { name: "Dra. Paula Nunes — Dentista", email: "paula.nunes@odontoerp.com.br", password: "Dentista@2026" },
+];
+
 function LoginPage() {
   const login = useServerFn(loginWithLock);
   const navigate = useNavigate();
