@@ -18,6 +18,8 @@ import { Route as AuthenticatedConfiguracoesRouteImport } from './routes/_authen
 import { Route as AuthenticatedEstoqueRouteImport } from './routes/_authenticated/estoque'
 import { Route as AuthenticatedFinanceiroRouteImport } from './routes/_authenticated/financeiro'
 import { Route as AuthenticatedOrcamentosRouteImport } from './routes/_authenticated/orcamentos'
+import { Route as AuthenticatedPacientesRouteImport } from './routes/_authenticated/pacientes'
+import { Route as AuthenticatedPainelRouteImport } from './routes/_authenticated/painel'
 import { Route as AuthenticatedProntuariosRouteImport } from './routes/_authenticated/prontuarios'
 import { Route as AuthenticatedRelatoriosRouteImport } from './routes/_authenticated/relatorios'
 
@@ -66,6 +68,16 @@ const AuthenticatedOrcamentosRoute = AuthenticatedOrcamentosRouteImport.update({
   path: '/orcamentos',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPacientesRoute = AuthenticatedPacientesRouteImport.update({
+  id: '/pacientes',
+  path: '/pacientes',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPainelRoute = AuthenticatedPainelRouteImport.update({
+  id: '/painel',
+  path: '/painel',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedProntuariosRoute =
   AuthenticatedProntuariosRouteImport.update({
     id: '/prontuarios',
@@ -87,6 +99,8 @@ export interface FileRoutesByFullPath {
   '/estoque': typeof AuthenticatedEstoqueRoute
   '/financeiro': typeof AuthenticatedFinanceiroRoute
   '/orcamentos': typeof AuthenticatedOrcamentosRoute
+  '/pacientes': typeof AuthenticatedPacientesRoute
+  '/painel': typeof AuthenticatedPainelRoute
   '/prontuarios': typeof AuthenticatedProntuariosRoute
   '/relatorios': typeof AuthenticatedRelatoriosRoute
 }
@@ -99,6 +113,8 @@ export interface FileRoutesByTo {
   '/estoque': typeof AuthenticatedEstoqueRoute
   '/financeiro': typeof AuthenticatedFinanceiroRoute
   '/orcamentos': typeof AuthenticatedOrcamentosRoute
+  '/pacientes': typeof AuthenticatedPacientesRoute
+  '/painel': typeof AuthenticatedPainelRoute
   '/prontuarios': typeof AuthenticatedProntuariosRoute
   '/relatorios': typeof AuthenticatedRelatoriosRoute
 }
@@ -113,6 +129,8 @@ export interface FileRoutesById {
   '/_authenticated/estoque': typeof AuthenticatedEstoqueRoute
   '/_authenticated/financeiro': typeof AuthenticatedFinanceiroRoute
   '/_authenticated/orcamentos': typeof AuthenticatedOrcamentosRoute
+  '/_authenticated/pacientes': typeof AuthenticatedPacientesRoute
+  '/_authenticated/painel': typeof AuthenticatedPainelRoute
   '/_authenticated/prontuarios': typeof AuthenticatedProntuariosRoute
   '/_authenticated/relatorios': typeof AuthenticatedRelatoriosRoute
 }
@@ -127,6 +145,8 @@ export interface FileRouteTypes {
     | '/estoque'
     | '/financeiro'
     | '/orcamentos'
+    | '/pacientes'
+    | '/painel'
     | '/prontuarios'
     | '/relatorios'
   fileRoutesByTo: FileRoutesByTo
@@ -139,6 +159,8 @@ export interface FileRouteTypes {
     | '/estoque'
     | '/financeiro'
     | '/orcamentos'
+    | '/pacientes'
+    | '/painel'
     | '/prontuarios'
     | '/relatorios'
   id:
@@ -152,6 +174,8 @@ export interface FileRouteTypes {
     | '/_authenticated/estoque'
     | '/_authenticated/financeiro'
     | '/_authenticated/orcamentos'
+    | '/_authenticated/pacientes'
+    | '/_authenticated/painel'
     | '/_authenticated/prontuarios'
     | '/_authenticated/relatorios'
   fileRoutesById: FileRoutesById
@@ -228,6 +252,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOrcamentosRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/pacientes': {
+      id: '/_authenticated/pacientes'
+      path: '/pacientes'
+      fullPath: '/pacientes'
+      preLoaderRoute: typeof AuthenticatedPacientesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/painel': {
+      id: '/_authenticated/painel'
+      path: '/painel'
+      fullPath: '/painel'
+      preLoaderRoute: typeof AuthenticatedPainelRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/prontuarios': {
       id: '/_authenticated/prontuarios'
       path: '/prontuarios'
@@ -251,6 +289,8 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedEstoqueRoute: typeof AuthenticatedEstoqueRoute
   AuthenticatedFinanceiroRoute: typeof AuthenticatedFinanceiroRoute
   AuthenticatedOrcamentosRoute: typeof AuthenticatedOrcamentosRoute
+  AuthenticatedPacientesRoute: typeof AuthenticatedPacientesRoute
+  AuthenticatedPainelRoute: typeof AuthenticatedPainelRoute
   AuthenticatedProntuariosRoute: typeof AuthenticatedProntuariosRoute
   AuthenticatedRelatoriosRoute: typeof AuthenticatedRelatoriosRoute
 }
@@ -261,6 +301,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedEstoqueRoute: AuthenticatedEstoqueRoute,
   AuthenticatedFinanceiroRoute: AuthenticatedFinanceiroRoute,
   AuthenticatedOrcamentosRoute: AuthenticatedOrcamentosRoute,
+  AuthenticatedPacientesRoute: AuthenticatedPacientesRoute,
+  AuthenticatedPainelRoute: AuthenticatedPainelRoute,
   AuthenticatedProntuariosRoute: AuthenticatedProntuariosRoute,
   AuthenticatedRelatoriosRoute: AuthenticatedRelatoriosRoute,
 }
