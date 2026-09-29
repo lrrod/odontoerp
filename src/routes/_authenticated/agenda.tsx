@@ -325,7 +325,7 @@ function AppointmentForm({ initial, dentists, schedules, onClose, onSaved }: {
       <DialogContent className="max-w-lg">
         <DialogHeader><DialogTitle>{initial.id ? "Remarcar consulta" : "Agendar consulta"}</DialogTitle></DialogHeader>
         <form className="space-y-3 text-[13px]" onSubmit={(e) => { e.preventDefault(); if (canSave) save.mutate(); }}>
-          <label className="block">
+          <div className="block">
             <span className="mb-1 block font-bold">Paciente</span>
             {patient ? (
               <div className="flex items-center justify-between rounded-md border border-input px-2.5 py-2">
@@ -339,7 +339,7 @@ function AppointmentForm({ initial, dentists, schedules, onClose, onSaved }: {
                   <ul className="absolute z-10 mt-1 w-full rounded-md border border-border bg-card shadow">
                     {patients.data!.map((p) => (
                       <li key={p.id}>
-                        <button type="button" className="w-full px-2.5 py-2 text-left hover:bg-muted" onClick={() => setPatient({ id: p.id, name: p.full_name })}>
+                        <button type="button" className="w-full px-2.5 py-2 text-left hover:bg-muted" onMouseDown={(e) => { e.preventDefault(); setPatient({ id: p.id, name: p.full_name }); }}>
                           {p.full_name}
                         </button>
                       </li>
@@ -351,7 +351,7 @@ function AppointmentForm({ initial, dentists, schedules, onClose, onSaved }: {
                 )}
               </div>
             )}
-          </label>
+          </div>
           <div className="grid grid-cols-2 gap-3">
             <label className="block"><span className="mb-1 block font-bold">Dentista</span>
               <select className={field} value={dentistId} onChange={(e) => setDentistId(e.target.value)}>
