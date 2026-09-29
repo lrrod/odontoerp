@@ -16,8 +16,6 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedAgendaRouteImport } from './routes/_authenticated/agenda'
 import { Route as AuthenticatedConfiguracoesRouteImport } from './routes/_authenticated/configuracoes'
 import { Route as AuthenticatedEstoqueRouteImport } from './routes/_authenticated/estoque'
-import { Route as AuthenticatedFinanceiroRouteImport } from './routes/_authenticated/financeiro'
-import { Route as AuthenticatedOrcamentosRouteImport } from './routes/_authenticated/orcamentos'
 import { Route as AuthenticatedPacientesRouteImport } from './routes/_authenticated/pacientes'
 import { Route as AuthenticatedPainelRouteImport } from './routes/_authenticated/painel'
 import { Route as AuthenticatedRelatoriosRouteImport } from './routes/_authenticated/relatorios'
@@ -59,16 +57,6 @@ const AuthenticatedEstoqueRoute = AuthenticatedEstoqueRouteImport.update({
   path: '/estoque',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedFinanceiroRoute = AuthenticatedFinanceiroRouteImport.update({
-  id: '/financeiro',
-  path: '/financeiro',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedOrcamentosRoute = AuthenticatedOrcamentosRouteImport.update({
-  id: '/orcamentos',
-  path: '/orcamentos',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedPacientesRoute = AuthenticatedPacientesRouteImport.update({
   id: '/pacientes',
   path: '/pacientes',
@@ -104,8 +92,6 @@ export interface FileRoutesByFullPath {
   '/agenda': typeof AuthenticatedAgendaRoute
   '/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/estoque': typeof AuthenticatedEstoqueRoute
-  '/financeiro': typeof AuthenticatedFinanceiroRoute
-  '/orcamentos': typeof AuthenticatedOrcamentosRoute
   '/pacientes': typeof AuthenticatedPacientesRoute
   '/painel': typeof AuthenticatedPainelRoute
   '/relatorios': typeof AuthenticatedRelatoriosRoute
@@ -119,8 +105,6 @@ export interface FileRoutesByTo {
   '/agenda': typeof AuthenticatedAgendaRoute
   '/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/estoque': typeof AuthenticatedEstoqueRoute
-  '/financeiro': typeof AuthenticatedFinanceiroRoute
-  '/orcamentos': typeof AuthenticatedOrcamentosRoute
   '/pacientes': typeof AuthenticatedPacientesRoute
   '/painel': typeof AuthenticatedPainelRoute
   '/relatorios': typeof AuthenticatedRelatoriosRoute
@@ -136,8 +120,6 @@ export interface FileRoutesById {
   '/_authenticated/agenda': typeof AuthenticatedAgendaRoute
   '/_authenticated/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/_authenticated/estoque': typeof AuthenticatedEstoqueRoute
-  '/_authenticated/financeiro': typeof AuthenticatedFinanceiroRoute
-  '/_authenticated/orcamentos': typeof AuthenticatedOrcamentosRoute
   '/_authenticated/pacientes': typeof AuthenticatedPacientesRoute
   '/_authenticated/painel': typeof AuthenticatedPainelRoute
   '/_authenticated/relatorios': typeof AuthenticatedRelatoriosRoute
@@ -153,8 +135,6 @@ export interface FileRouteTypes {
     | '/agenda'
     | '/configuracoes'
     | '/estoque'
-    | '/financeiro'
-    | '/orcamentos'
     | '/pacientes'
     | '/painel'
     | '/relatorios'
@@ -168,8 +148,6 @@ export interface FileRouteTypes {
     | '/agenda'
     | '/configuracoes'
     | '/estoque'
-    | '/financeiro'
-    | '/orcamentos'
     | '/pacientes'
     | '/painel'
     | '/relatorios'
@@ -184,8 +162,6 @@ export interface FileRouteTypes {
     | '/_authenticated/agenda'
     | '/_authenticated/configuracoes'
     | '/_authenticated/estoque'
-    | '/_authenticated/financeiro'
-    | '/_authenticated/orcamentos'
     | '/_authenticated/pacientes'
     | '/_authenticated/painel'
     | '/_authenticated/relatorios'
@@ -251,20 +227,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedEstoqueRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/financeiro': {
-      id: '/_authenticated/financeiro'
-      path: '/financeiro'
-      fullPath: '/financeiro'
-      preLoaderRoute: typeof AuthenticatedFinanceiroRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/orcamentos': {
-      id: '/_authenticated/orcamentos'
-      path: '/orcamentos'
-      fullPath: '/orcamentos'
-      preLoaderRoute: typeof AuthenticatedOrcamentosRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/pacientes': {
       id: '/_authenticated/pacientes'
       path: '/pacientes'
@@ -307,8 +269,6 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAgendaRoute: typeof AuthenticatedAgendaRoute
   AuthenticatedConfiguracoesRoute: typeof AuthenticatedConfiguracoesRoute
   AuthenticatedEstoqueRoute: typeof AuthenticatedEstoqueRoute
-  AuthenticatedFinanceiroRoute: typeof AuthenticatedFinanceiroRoute
-  AuthenticatedOrcamentosRoute: typeof AuthenticatedOrcamentosRoute
   AuthenticatedPacientesRoute: typeof AuthenticatedPacientesRoute
   AuthenticatedPainelRoute: typeof AuthenticatedPainelRoute
   AuthenticatedRelatoriosRoute: typeof AuthenticatedRelatoriosRoute
@@ -320,8 +280,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAgendaRoute: AuthenticatedAgendaRoute,
   AuthenticatedConfiguracoesRoute: AuthenticatedConfiguracoesRoute,
   AuthenticatedEstoqueRoute: AuthenticatedEstoqueRoute,
-  AuthenticatedFinanceiroRoute: AuthenticatedFinanceiroRoute,
-  AuthenticatedOrcamentosRoute: AuthenticatedOrcamentosRoute,
   AuthenticatedPacientesRoute: AuthenticatedPacientesRoute,
   AuthenticatedPainelRoute: AuthenticatedPainelRoute,
   AuthenticatedRelatoriosRoute: AuthenticatedRelatoriosRoute,
