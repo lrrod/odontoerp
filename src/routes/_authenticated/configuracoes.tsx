@@ -135,7 +135,7 @@ function ProceduresPanel() {
   });
   const [form, setForm] = useState<{ id?: string; code: string; name: string; price: string }>({ code: "", name: "", price: "" });
   const save = useMutation({
-    mutationFn: async (row: { id?: string; code: string; name: string; price: number; active?: boolean }) => {
+    mutationFn: async (row: { id?: string | undefined; code: string; name: string; price: number; active?: boolean }) => {
       const { error } = row.id
         ? await supabase.from("procedures").update(row).eq("id", row.id)
         : await supabase.from("procedures").insert(row);

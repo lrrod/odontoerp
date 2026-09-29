@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 export type ToothRow = { tooth: number; face: string; condition: string };
 
-function ToothSvg({ faces, whole }: { faces: Record<string, Condition>; whole?: Condition }) {
+function ToothSvg({ faces, whole }: { faces: Record<string, Condition>; whole?: Condition | undefined }) {
   const f = (k: Face) => (whole === "extrair" ? FILL.extrair : whole === "ausente" ? FILL.ausente : FILL[faces[k] ?? "higido"]);
   const stroke = "var(--foreground)";
   return (
@@ -102,7 +102,7 @@ export function Odontogram({ rows, editable, onSet }: {
   );
 }
 
-function CondButton({ c, active, disabled, onClick, label }: { c: Condition; active: boolean; disabled: boolean; onClick: () => void; label?: string }) {
+function CondButton({ c, active, disabled, onClick, label }: { c: Condition; active: boolean; disabled: boolean; onClick: () => void; label?: string | undefined }) {
   return (
     <button type="button" disabled={disabled} onClick={onClick}
       className={cn("flex h-7 items-center gap-1.5 rounded-md border px-2 text-[12px] disabled:opacity-60",
