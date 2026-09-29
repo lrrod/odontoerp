@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.appointments_validate() FROM authenticated;
