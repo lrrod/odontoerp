@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -53,6 +53,11 @@ function Chart() {
   const appt = data?.appt;
   const editable = !!appt && !["realizada", "cancelada", "falta"].includes(appt.status);
   const refresh = () => qc.invalidateQueries({ queryKey: key });
+  const router = useRouter();
+  const goBack = () => {
+    if (router.history.canGoBack()) router.history.back();
+    else navigate({ to: "/prontuarios" });
+  };
 
   // Opening the appointment moves it to "Em atendimento"
   const started = useRef(false);
@@ -99,7 +104,7 @@ function Chart() {
         if (u.error) throw u.error;
       }
     },
-    onSuccess: () => { toast.success("Rascunho salvo"); refresh(); qc.invalidateQueries({ queryKey: ["appointments"] }); },
+    onSuccess: () => { toast.success("Rascunho salvo"); refresh(); qc.invalidateQueries({ queryKey: ["appointments"] }); goBack(); },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -114,6 +119,7 @@ function Chart() {
       qc.invalidateQueries({ queryKey: ["appointments"] });
       qc.invalidateQueries({ queryKey: ["dashboard"] });
       refresh();
+      goBack();
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -131,6 +137,7 @@ function Chart() {
       <PageHeader title="Prontuário" />
       <main className="grid gap-4 p-6 xl:grid-cols-[1fr_380px]">
         <div className="min-w-0 space-y-4">
+          <button className="text-[13px] text-primary hover:underline" onClick={goBack}>◀ Voltar</button>
           <Panel>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
