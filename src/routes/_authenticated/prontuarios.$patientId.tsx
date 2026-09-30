@@ -259,7 +259,14 @@ function TreatmentPlan({ patientId, steps, procs, editable, onChange }: {
               <td>
                 {editable && s.status !== "concluida" ? (
                   <select className={input} value={s.status}
-                    onChange={(e) => run.mutate(() => supabase.from("treatment_plan_steps").update({ status: e.target.value }).eq("id", s.id))}>
+                    onChange={(e) => {
+                      const status = e.target.value;
+                      run.mutate(async () => {
+                        const r = await supabase.from("treatment_plan_steps").update({ status }).eq("id", s.id).select("id");
+                        if (!r.error && !r.data?.length) return { error: { message: "Não foi possível alterar o status desta etapa." } };
+                        return r;
+                      });
+                    }}>
                     {Object.entries(STEP_STATUS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
                   </select>
                 ) : (
