@@ -112,15 +112,48 @@ Na tela de login, clique em um dos usuários de teste para preencher o formulár
 ## Estrutura de pastas
 
 ```
-src/
-  routes/          páginas do sistema (uma por arquivo)
-    _authenticated/  páginas que exigem login (agenda, pacientes, etc.)
-  components/      componentes reutilizáveis (menu, odontograma, impressão)
-  lib/             regras e utilitários (agenda, financeiro, permissões)
-  integrations/    conexão com o backend (gerado automaticamente)
-supabase/
-  migrations/      scripts SQL do banco (tabelas, regras de acesso, gatilhos)
+.
+├── .lovable/              planos e configurações do Lovable (não alterar)
+├── public/                arquivos estáticos (favicon, robots.txt)
+├── src/
+│   ├── routes/            páginas: cada arquivo vira uma URL (TanStack Router)
+│   │   ├── __root.tsx     layout raiz (HTML, fontes, avisos)
+│   │   ├── index.tsx      página inicial (redireciona para login/painel)
+│   │   ├── login.tsx, reset-password.tsx
+│   │   └── _authenticated/  páginas que exigem login
+│   │       ├── route.tsx    menu lateral + verificação de perfil
+│   │       ├── painel.tsx, pacientes.tsx, agenda.tsx
+│   │       ├── prontuarios.index.tsx, prontuarios.$patientId.tsx
+│   │       ├── orcamentos.index.tsx, orcamentos.$id.pdf.tsx
+│   │       ├── financeiro.index.tsx, financeiro.recibo.$id.tsx
+│   │       └── estoque.tsx, relatorios.tsx, configuracoes.tsx
+│   ├── components/        componentes (AppShell, Odontogram, PrintSheet...)
+│   │   └── ui/            componentes base (shadcn/ui)
+│   ├── hooks/             hooks React
+│   ├── lib/               regras e utilitários (agenda, financeiro, permissões,
+│   │                      funções de servidor *.functions.ts)
+│   ├── integrations/supabase/  conexão com o backend (gerado, não editar)
+│   ├── routeTree.gen.ts   mapa de rotas (gerado, não editar)
+│   ├── router.tsx, start.ts, server.ts   inicialização do app
+│   └── styles.css         tema e cores (Tailwind v4)
+├── supabase/
+│   ├── config.toml        configuração do backend
+│   └── migrations/        scripts SQL (tabelas, regras de acesso, gatilhos, dados de exemplo)
+├── AGENTS.md              decisões técnicas do projeto
+├── package.json           dependências e comandos
+└── vite.config.ts         configuração do Vite
 ```
+
+## Desenvolvimento com Lovable
+
+Este projeto foi criado e é mantido com o [Lovable](https://lovable.dev), plataforma que gera e edita o código a partir de instruções em linguagem natural.
+
+- **Editor:** https://lovable.dev/projects/7b338096-545f-4c43-88fc-16afa6597555
+- **Aplicação publicada:** https://odontoerp.lovable.app
+- **Sincronização com o GitHub:** cada alteração feita no Lovable vira um commit neste repositório, e cada `push` no branch `main` volta para o Lovable automaticamente. Só o branch selecionado no Lovable (Configurações → Git) é sincronizado.
+- **Backend:** banco, autenticação e regras de acesso ficam no Lovable Cloud. Mudanças no banco são feitas por migrations em `supabase/migrations/`, aplicadas pelo Lovable (não rodam sozinhas com `git push`).
+- **Desenvolvimento local:** dá para editar no seu computador (passos acima) e enviar com `git push`; o Lovable recebe as alterações. Faça `git pull` antes para não conflitar com edições feitas no Lovable.
+- **Arquivos gerados automaticamente** (não editar à mão): `src/routeTree.gen.ts`, `src/integrations/supabase/*` e `.env`.
 
 ## Problemas comuns
 
