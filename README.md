@@ -2,6 +2,10 @@
 
 OdontoERP
 
+## Iteração 2
+
+Branch `iteracao2` criado a partir do `master` após a tag `v1` (entrega da Iteração 1).
+
 This project was built with [Lovable](https://lovable.dev).
 
 ## Build with Lovable
