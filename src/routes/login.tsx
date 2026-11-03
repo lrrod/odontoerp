@@ -112,6 +112,7 @@ function LoginPage() {
           </div>
         </div>
       )}
+      <p className="mt-5 text-center text-[11px] text-muted-foreground">Versão 2 (Iteração 2)</p>
     </AuthCard>
   );
 }
