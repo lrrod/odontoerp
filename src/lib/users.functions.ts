@@ -54,6 +54,7 @@ export const createUser = createServerFn({ method: "POST" })
       email: data.email, password: data.password, email_confirm: true, user_metadata: { full_name: data.full_name },
     });
     if (error || !created.user) {
+      console.error("[createUser]", error?.message);
       const dupe = /already|registered|exists/i.test(error?.message ?? "");
       return { ok: false as const, error: dupe ? "Já existe um usuário com este e-mail." : "Não foi possível criar o usuário." };
     }
