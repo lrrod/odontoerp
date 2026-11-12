@@ -101,7 +101,7 @@ function Configuracoes() {
   );
 }
 
-function Frame({ bare, title, children }: { bare?: boolean; title: string; children: React.ReactNode }) {
+function Frame({ bare, title, children }: { bare?: boolean | undefined; title: string; children: React.ReactNode }) {
   return bare ? <div>{children}</div> : <Panel title={title}>{children}</Panel>;
 }
 

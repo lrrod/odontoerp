@@ -94,6 +94,6 @@ export function UsersPanel({ bare }: { bare?: boolean } = {}) {
   );
 }
 
-function Wrap({ bare, children }: { bare?: boolean; children: React.ReactNode }) {
+function Wrap({ bare, children }: { bare?: boolean | undefined; children: React.ReactNode }) {
   return bare ? <div>{children}</div> : <Panel title="Usuários">{children}</Panel>;
 }
