@@ -132,6 +132,7 @@ Na tela de login, clique em um dos usuários de teste para preencher o formulár
 ├── supabase/
 │   ├── config.toml        configuração do backend
 │   └── migrations/        scripts SQL (tabelas, regras de acesso, gatilhos, dados de exemplo)
+├── testes/                registros de execução do plano de testes
 ├── AGENTS.md              decisões técnicas do projeto
 ├── package.json           dependências e comandos
 └── vite.config.ts         configuração do Vite
