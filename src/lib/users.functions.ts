@@ -56,7 +56,8 @@ export const createUser = createServerFn({ method: "POST" })
     if (error || !created.user) {
       console.error("[createUser]", error?.message);
       const dupe = /already|registered|exists/i.test(error?.message ?? "");
-      return { ok: false as const, error: dupe ? "Já existe um usuário com este e-mail." : "Não foi possível criar o usuário." };
+      const weak = /weak|pwned|guess/i.test(error?.message ?? "");
+      return { ok: false as const, error: dupe ? "Já existe um usuário com este e-mail." : weak ? "Senha provisória muito fraca ou conhecida. Escolha outra." : "Não foi possível criar o usuário." };
     }
     const id = created.user.id;
     try {
