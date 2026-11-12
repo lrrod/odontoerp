@@ -37,6 +37,9 @@ export const loginWithLock = createServerFn({ method: "POST" })
     });
     const { data: auth, error } = await client.auth.signInWithPassword({ email: data.email, password: data.password });
 
+    if (error && /banned/i.test(error.message)) {
+      return { ok: false as const, error: "Usuário inativo. Procure o Administrador." };
+    }
     if (error || !auth.session) {
       const expired = row?.locked_until && new Date(row.locked_until) <= now;
       const count = (expired ? 0 : row?.failed_count ?? 0) + 1;
@@ -52,6 +55,8 @@ export const loginWithLock = createServerFn({ method: "POST" })
     }
 
     await supabaseAdmin.from("login_attempts").delete().eq("email", data.email);
+    const { data: prof } = await supabaseAdmin.from("profiles").select("active").eq("id", auth.session.user.id).maybeSingle();
+    if (prof && !prof.active) return { ok: false as const, error: "Usuário inativo. Procure o Administrador." };
     return {
       ok: true as const,
       access_token: auth.session.access_token,

@@ -20,3 +20,4 @@
 - Quote PDF and receipts are print routes using `PrintSheet` + `@media print` CSS, no PDF library.
 - Stock balances change only via `stock_entry`/`stock_exit` RPCs (admin-checked, block use of expired lots); `stock_movements` is append-only (guard trigger). Restock alerts are derived from balance < minimum at read time, so they clear automatically.
 - Reports (`relatorios.tsx`) aggregate in the browser under admin RLS; revenue per dentist = dentist of patient's last realized appointment up to payment date. Why: payments aren't linked to appointments.
+- User management (create/role/deactivate) runs only in `src/lib/users.functions.ts` server fns that verify admin via `has_role` before loading the service client; `profiles.active=false` + auth ban blocks login, and `has_role`/`is_staff` return false for inactive users. Why: privileges must be enforced in the database, not the UI.
