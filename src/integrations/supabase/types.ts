@@ -866,6 +866,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_staff: { Args: { _user_id: string }; Returns: boolean }
       quote_plan_items: {
         Args: { _patient: string }
         Returns: {
