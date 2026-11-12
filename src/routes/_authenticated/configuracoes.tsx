@@ -7,6 +7,10 @@ import { PageHeader, Panel } from "@/components/AppShell";
 import { WEEKDAYS, toMin } from "@/lib/schedule";
 import { brl } from "@/lib/format";
 import { UsersPanel } from "@/components/UsersPanel";
+import { useServerFn } from "@tanstack/react-start";
+import { listUsers } from "@/lib/users.functions";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Users, Building2, Stethoscope, Clock, ChevronRight } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/configuracoes")({
   head: () => ({
@@ -22,6 +26,8 @@ type Row = { active: boolean; start: string; end: string; lunchStart: string; lu
 const DEFAULT: Row = { active: false, start: "08:00", end: "18:00", lunchStart: "12:00", lunchEnd: "13:30", slot: 40 };
 const t = (v: string | null) => (v ? v.slice(0, 5) : "");
 
+type Section = "users" | "clinic" | "procedures" | "journey";
+
 function Configuracoes() {
   const { data } = useQuery({
     queryKey: ["config-schedules"],
@@ -33,24 +39,74 @@ function Configuracoes() {
       return { dentists: d.data ?? [], schedules: s.data ?? [] };
     },
   });
+  const listUsersFn = useServerFn(listUsers);
+  const users = useQuery({ queryKey: ["users-admin"], queryFn: () => listUsersFn() }).data;
+  const clinic = useQuery({
+    queryKey: ["clinic"],
+    queryFn: async () => (await supabase.from("clinic_settings").select("*").eq("id", 1).maybeSingle()).data,
+  }).data;
+  const procs = useQuery({
+    queryKey: ["procedures-admin"],
+    queryFn: async () => (await supabase.from("procedures").select("*").order("code")).data ?? [],
+  }).data;
+  const [open, setOpen] = useState<Section | null>(null);
+  const [dentistId, setDentistId] = useState<string>("");
+  const dentist = data?.dentists.find((d) => d.id === dentistId) ?? data?.dentists[0];
+
+  const cards: { key: Section; title: string; sub: string; Icon: typeof Users }[] = [
+    { key: "users", title: "Usuários", sub: users ? `${users.filter((u) => u.active).length} usuários ativos` : "…", Icon: Users },
+    { key: "clinic", title: "Dados da clínica", sub: clinic?.name ?? "…", Icon: Building2 },
+    { key: "procedures", title: "Procedimentos", sub: procs ? `${procs.filter((p) => p.active).length} procedimentos ativos` : "…", Icon: Stethoscope },
+    { key: "journey", title: "Jornada dos dentistas", sub: data ? `${data.dentists.length} dentistas` : "…", Icon: Clock },
+  ];
+  const titles: Record<Section, string> = { users: "Usuários", clinic: "Dados da clínica", procedures: "Procedimentos", journey: "Jornada de trabalho dos dentistas" };
+
   return (
     <>
       <PageHeader title="Configurações" />
-      <main className="space-y-4 p-6">
-        <UsersPanel />
-        <ClinicPanel />
-        <ProceduresPanel />
-        <h2 className="text-[15px] font-bold">Jornada de trabalho dos dentistas</h2>
-        <p className="text-[13px] text-muted-foreground">A Agenda só oferece horários dentro desta jornada.</p>
-        {data?.dentists.map((d) => (
-          <DentistJourney key={d.id} dentist={d} schedules={data.schedules.filter((s) => s.dentist_id === d.id)} />
+      <main className="grid gap-4 p-6 md:grid-cols-2">
+        {cards.map(({ key, title, sub, Icon }) => (
+          <button key={key} onClick={() => setOpen(key)}
+            className="flex items-center gap-4 rounded-lg border border-border bg-card p-5 text-left shadow-sm transition hover:border-primary hover:shadow-md">
+            <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary"><Icon className="h-7 w-7" /></span>
+            <span className="flex-1">
+              <span className="block text-[16px] font-bold">{title}</span>
+              <span className="block text-[13px] text-muted-foreground">{sub}</span>
+            </span>
+            <ChevronRight className="h-5 w-5 text-muted-foreground" />
+          </button>
         ))}
       </main>
+      <Dialog open={open !== null} onOpenChange={(o) => !o && setOpen(null)}>
+        <DialogContent className="max-h-[90vh] w-[95vw] max-w-5xl overflow-y-auto">
+          <DialogHeader><DialogTitle>{open ? titles[open] : ""}</DialogTitle></DialogHeader>
+          {open === "users" && <UsersPanel bare />}
+          {open === "clinic" && <ClinicPanel bare />}
+          {open === "procedures" && <ProceduresPanel bare />}
+          {open === "journey" && (
+            <div className="space-y-3">
+              <p className="text-[13px] text-muted-foreground">A Agenda só oferece horários dentro desta jornada.</p>
+              <select aria-label="Dentista" className="h-8 rounded-md border border-input bg-card px-2 text-[13px]"
+                value={dentist?.id ?? ""} onChange={(e) => setDentistId(e.target.value)}>
+                {data?.dentists.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
+              </select>
+              {dentist && data && (
+                <DentistJourney key={dentist.id} bare dentist={dentist} schedules={data.schedules.filter((s) => s.dentist_id === dentist.id)} />
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
 
-function DentistJourney({ dentist, schedules }: {
+function Frame({ bare, title, children }: { bare?: boolean | undefined; title: string; children: React.ReactNode }) {
+  return bare ? <div>{children}</div> : <Panel title={title}>{children}</Panel>;
+}
+
+function DentistJourney({ dentist, schedules, bare }: {
+  bare?: boolean;
   dentist: { id: string; name: string };
   schedules: { weekday: number; start_time: string; end_time: string; lunch_start: string | null; lunch_end: string | null; slot_minutes: number }[];
 }) {
@@ -90,7 +146,7 @@ function DentistJourney({ dentist, schedules }: {
 
   const input = "h-8 rounded-md border border-input bg-card px-2 text-[13px] disabled:opacity-40";
   return (
-    <Panel title={dentist.name}>
+    <Frame bare={bare} title={dentist.name}>
       <table className="w-full text-[13px]">
         <thead>
           <tr className="border-b-2 border-border text-left text-muted-foreground">
@@ -126,11 +182,11 @@ function DentistJourney({ dentist, schedules }: {
           {save.isPending ? "Salvando…" : "Salvar jornada"}
         </button>
       </div>
-    </Panel>
+    </Frame>
   );
 }
 
-function ProceduresPanel() {
+function ProceduresPanel({ bare }: { bare?: boolean }) {
   const qc = useQueryClient();
   const { data } = useQuery({
     queryKey: ["procedures-admin"],
@@ -152,7 +208,7 @@ function ProceduresPanel() {
   const price = Number(form.price.replace(",", "."));
   const valid = form.code.trim() && form.name.trim() && form.price !== "" && price >= 0;
   return (
-    <Panel title="Procedimentos">
+    <Frame bare={bare} title="Procedimentos">
       <table className="w-full text-[13px]">
         <thead>
           <tr className="border-b-2 border-border text-left text-muted-foreground"><th className="py-2">Código</th><th>Nome</th><th>Valor</th><th>Situação</th><th /></tr>
@@ -183,11 +239,11 @@ function ProceduresPanel() {
           {form.id ? "Salvar alteração" : "Adicionar"}
         </button>
       </div>
-    </Panel>
+    </Frame>
   );
 }
 
-function ClinicPanel() {
+function ClinicPanel({ bare }: { bare?: boolean }) {
   const qc = useQueryClient();
   const { data } = useQuery({
     queryKey: ["clinic"],
@@ -208,7 +264,7 @@ function ClinicPanel() {
   const input = "h-8 w-full rounded-md border border-input bg-card px-2 text-[13px]";
   const fields: [keyof typeof f, string][] = [["name", "Nome da clínica"], ["cnpj", "CNPJ"], ["address", "Endereço"], ["phone", "Telefone"], ["email", "E-mail"]];
   return (
-    <Panel title="Dados da clínica (usados no orçamento em PDF e nos recibos)">
+    <Frame bare={bare} title="Dados da clínica (usados no orçamento em PDF e nos recibos)">
       <div className="grid grid-cols-2 gap-2">
         {fields.map(([k, l]) => (
           <label key={k} className={`text-xs font-bold text-foreground/80 ${k === "address" ? "col-span-2" : ""}`}>
@@ -221,6 +277,6 @@ function ClinicPanel() {
         <button disabled={!f.name.trim() || save.isPending} onClick={() => save.mutate()}
           className="h-8 rounded-md bg-primary px-4 text-[13px] font-bold text-primary-foreground disabled:opacity-50">Salvar</button>
       </div>
-    </Panel>
+    </Frame>
   );
 }
