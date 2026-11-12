@@ -8,6 +8,13 @@
       "when": 1794492864169,
       "tag": "0000_restrict_staff_reads",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794498099461,
+      "tag": "0001_user_active_flag",
+      "breakpoints": true
     }
   ]
 }

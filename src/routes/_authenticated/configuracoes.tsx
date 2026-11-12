@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { PageHeader, Panel } from "@/components/AppShell";
 import { WEEKDAYS, toMin } from "@/lib/schedule";
 import { brl } from "@/lib/format";
+import { UsersPanel } from "@/components/UsersPanel";
 
 export const Route = createFileRoute("/_authenticated/configuracoes")({
   head: () => ({
@@ -36,6 +37,7 @@ function Configuracoes() {
     <>
       <PageHeader title="Configurações" />
       <main className="space-y-4 p-6">
+        <UsersPanel />
         <ClinicPanel />
         <ProceduresPanel />
         <h2 className="text-[15px] font-bold">Jornada de trabalho dos dentistas</h2>
