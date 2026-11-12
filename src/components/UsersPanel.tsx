@@ -12,7 +12,7 @@ const ROLES: AppRole[] = ["admin", "dentista", "recepcionista"];
 const input = "h-8 rounded-md border border-input bg-card px-2 text-[13px] disabled:opacity-50";
 const EMPTY = { full_name: "", email: "", password: "", role: "recepcionista" as AppRole };
 
-export function UsersPanel() {
+export function UsersPanel({ bare }: { bare?: boolean } = {}) {
   const qc = useQueryClient();
   const me = useCurrentUser().data;
   const list = useServerFn(listUsers), create = useServerFn(createUser);
@@ -36,7 +36,7 @@ export function UsersPanel() {
   const valid = f.full_name.trim().length >= 3 && /\S+@\S+\.\S+/.test(f.email) && f.password.length >= 8;
 
   return (
-    <Panel title="Usuários">
+    <Wrap bare={bare}>
       <div className="mb-3 flex justify-end">
         <button onClick={() => setOpen(!open)} className="h-8 rounded-md bg-primary px-4 text-[13px] font-bold text-primary-foreground">+ Novo usuário</button>
       </div>
@@ -90,6 +90,10 @@ export function UsersPanel() {
           })}
         </tbody>
       </table>
-    </Panel>
+    </Wrap>
   );
+}
+
+function Wrap({ bare, children }: { bare?: boolean; children: React.ReactNode }) {
+  return bare ? <div>{children}</div> : <Panel title="Usuários">{children}</Panel>;
 }
