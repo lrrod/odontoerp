@@ -1,5 +1,11 @@
 # Execução do Plano de Testes — OdontoERP
-Data: 2026-11-12 · Executores: Cecilia Souza Fonseca — RA 10728770, Gustavo Mesquita Ananias — RA 10722274, Isac Santana Silva — RA 10728263, Lucas Cardoso Loureiro Souto — RA 10725746, Luiz Rodrigo Alves Vergino — RA 10176038 · Ambiente: https://odontoerp.lovable.app
+Data: 2026-11-12 · 
+Executores: Cecilia Souza Fonseca — RA 10728770, 
+Gustavo Mesquita Ananias — RA 10722274, 
+Isac Santana Silva — RA 10728263, 
+Lucas Cardoso Loureiro Souto — RA 10725746, 
+Luiz Rodrigo Alves Vergino — RA 10176038 · 
+Ambiente: https://odontoerp.lovable.app
 Perfis: Roberto Lima (admin), Ana Souza (recepcionista), Dr. Carlos Prado (dentista)
 
 | CT | Resultado | Observação |
