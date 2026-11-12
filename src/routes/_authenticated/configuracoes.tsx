@@ -102,7 +102,7 @@ function Configuracoes() {
 }
 
 function Frame({ bare, title, children }: { bare?: boolean; title: string; children: React.ReactNode }) {
-  return bare ? <div>{children}</div> : <Panel title={title}>{children}</Frame>;
+  return bare ? <div>{children}</div> : <Panel title={title}>{children}</Panel>;
 }
 
 function DentistJourney({ dentist, schedules, bare }: {
